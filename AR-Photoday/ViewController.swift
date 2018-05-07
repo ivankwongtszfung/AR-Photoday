@@ -20,19 +20,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the view's delegate
         sceneView.delegate = self
         
-//        // Show statistics such as fps and timing information
-//        sceneView.showsStatistics = true
-//
-//        // Create a new scene
-//        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-//
-//        // Set the scene to the view
-//        sceneView.scene = scene
+        // Hide the Nav Bar
+        self.navigationController?.isNavigationBarHidden = true
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Hide the Nav Bar
+        self.navigationController?.isNavigationBarHidden = true
+
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
 
@@ -43,8 +41,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        // Hide the Nav Bar
+        self.navigationController?.isNavigationBarHidden = false
+
         // Pause the view's session
         sceneView.session.pause()
+        
     }
     
     override func didReceiveMemoryWarning() {
