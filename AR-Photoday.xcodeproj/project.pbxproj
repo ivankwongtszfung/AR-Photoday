@@ -293,13 +293,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JMZ958S3EW;
+				DEVELOPMENT_TEAM = 7B3ZDQVLSW;
 				INFOPLIST_FILE = "AR-Photoday/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kit.edu.cuhk.cse.csci4140.group7.AR-Photoday";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.cuhk.cse.csci4140.group7.AR-Photoday";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -311,13 +311,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JMZ958S3EW;
+				DEVELOPMENT_TEAM = 7B3ZDQVLSW;
 				INFOPLIST_FILE = "AR-Photoday/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kit.edu.cuhk.cse.csci4140.group7.AR-Photoday";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.cuhk.cse.csci4140.group7.AR-Photoday";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

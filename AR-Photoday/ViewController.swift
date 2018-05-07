@@ -51,6 +51,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
     }
+    
+    // MARK: - UI button actions
+    // Reload the scene (re-initialize all models)
+    @IBAction func reloadScene(_ sender: Any) {
+        print("Reloading")
+    }
+    
+    // Open settings page
+    @IBAction func openSettings(_ sender: Any) {
+    }
+    
+    // Open photo album
+    @IBAction func openAlbum(_ sender: Any) {
+    }
+
+    // Take a photo and save to album
+    @IBAction func takePhoto(_ sender: Any) {
+        let image = sceneView.snapshot()
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // Add a new model
+    @IBAction func addModel(_ sender: Any) {
+    }
 
     // MARK: - ARSCNViewDelegate
     

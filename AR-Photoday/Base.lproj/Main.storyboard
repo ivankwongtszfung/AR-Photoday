@@ -18,6 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HSG-PW-wgc">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBJ-Qv-iRX" customClass="SnapButton" customModule="AR_Photoday">
                                 <rect key="frame" x="152" y="577" width="70" height="70"/>
                                 <constraints>
@@ -35,6 +38,9 @@
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="takePhoto:" destination="BV1-FR-VrT" eventType="touchUpInside" id="W2U-Di-Jub"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fct-uc-Edg">
                                 <rect key="frame" x="324" y="612" width="35" height="35"/>
@@ -43,6 +49,9 @@
                                     <constraint firstAttribute="width" constant="35" id="wzf-vA-xbl"/>
                                 </constraints>
                                 <state key="normal" image="add.png"/>
+                                <connections>
+                                    <action selector="addModel:" destination="BV1-FR-VrT" eventType="touchUpInside" id="9Cp-Wd-AyA"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-hm-CcE">
                                 <rect key="frame" x="16" y="612" width="35" height="35"/>
@@ -51,6 +60,9 @@
                                     <constraint firstAttribute="width" constant="35" id="Svu-bw-flL"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="photos.png"/>
+                                <connections>
+                                    <action selector="openAlbum:" destination="BV1-FR-VrT" eventType="touchUpInside" id="c2z-L4-CgT"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggp-O3-De3">
                                 <rect key="frame" x="16" y="30" width="35" height="35"/>
@@ -59,6 +71,9 @@
                                     <constraint firstAttribute="height" constant="35" id="ViH-Yd-FJf"/>
                                 </constraints>
                                 <state key="normal" image="refresh.png"/>
+                                <connections>
+                                    <action selector="reloadScene:" destination="BV1-FR-VrT" eventType="touchUpInside" id="c37-NL-s9m"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nF1-DM-2pN">
                                 <rect key="frame" x="324" y="30" width="35" height="35"/>
@@ -67,10 +82,10 @@
                                     <constraint firstAttribute="height" constant="35" id="gdH-DI-nvg"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="setting.png"/>
+                                <connections>
+                                    <action selector="openSettings:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Qqu-KU-Isd"/>
+                                </connections>
                             </button>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HSG-PW-wgc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </arscnView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
