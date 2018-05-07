@@ -1,27 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A278a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <arscnView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="BrB-h1-WRS">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="AR_Photoday" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Gfq-4T-ZnD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arscnView>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBJ-Qv-iRX" customClass="SnapButton" customModule="AR_Photoday">
+                                <rect key="frame" x="152" y="577" width="70" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="88a-W0-gWB"/>
+                                    <constraint firstAttribute="width" constant="70" id="AOe-7I-Xhf"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="35"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fct-uc-Edg">
+                                <rect key="frame" x="324" y="612" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="DCv-9n-tUN"/>
+                                    <constraint firstAttribute="width" constant="35" id="wzf-vA-xbl"/>
+                                </constraints>
+                                <state key="normal" image="add.png"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-hm-CcE">
+                                <rect key="frame" x="16" y="612" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="6ip-cD-9T6"/>
+                                    <constraint firstAttribute="width" constant="35" id="Svu-bw-flL"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="photos.png"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggp-O3-De3">
+                                <rect key="frame" x="16" y="30" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="66w-NX-pWB"/>
+                                    <constraint firstAttribute="height" constant="35" id="ViH-Yd-FJf"/>
+                                </constraints>
+                                <state key="normal" image="refresh.png"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nF1-DM-2pN">
+                                <rect key="frame" x="324" y="30" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="3wS-k5-o9g"/>
+                                    <constraint firstAttribute="height" constant="35" id="gdH-DI-nvg"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="setting.png"/>
+                            </button>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HSG-PW-wgc">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nF1-DM-2pN" firstAttribute="leading" secondItem="HSG-PW-wgc" secondAttribute="trailing" constant="-51" id="3RW-hz-dST"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="leading" secondItem="oP0-Xl-Qla" secondAttribute="leading" id="9aU-2e-QEI"/>
+                            <constraint firstAttribute="bottom" secondItem="HSG-PW-wgc" secondAttribute="bottom" id="9tv-g9-sva"/>
+                            <constraint firstItem="fct-uc-Edg" firstAttribute="top" secondItem="HSG-PW-wgc" secondAttribute="bottom" constant="-55" id="Bgm-nm-oX8"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="top" secondItem="nF1-DM-2pN" secondAttribute="bottom" constant="-65" id="CHJ-0C-wjO"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="trailing" secondItem="oP0-Xl-Qla" secondAttribute="trailing" id="Liz-RX-7ry"/>
+                            <constraint firstItem="Ecc-hm-CcE" firstAttribute="top" secondItem="HSG-PW-wgc" secondAttribute="bottom" constant="-55" id="MTd-qN-zsT"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="top" secondItem="ggp-O3-De3" secondAttribute="bottom" constant="-65" id="MbM-cW-aCt"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="leading" secondItem="ggp-O3-De3" secondAttribute="trailing" constant="-51" id="PIb-9m-ASd"/>
+                            <constraint firstAttribute="bottom" secondItem="HSG-PW-wgc" secondAttribute="bottom" id="WBb-gO-lzq"/>
+                            <constraint firstItem="dBJ-Qv-iRX" firstAttribute="centerX" secondItem="Gfq-4T-ZnD" secondAttribute="centerX" id="b2h-a6-JlC"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="leading" secondItem="Ecc-hm-CcE" secondAttribute="trailing" constant="-51" id="dan-35-pne"/>
+                            <constraint firstItem="HSG-PW-wgc" firstAttribute="top" secondItem="Gfq-4T-ZnD" secondAttribute="top" id="mmh-N7-aOu"/>
+                            <constraint firstItem="dBJ-Qv-iRX" firstAttribute="top" secondItem="HSG-PW-wgc" secondAttribute="bottom" constant="-90" id="o1y-hH-udn"/>
+                            <constraint firstItem="fct-uc-Edg" firstAttribute="leading" secondItem="HSG-PW-wgc" secondAttribute="trailing" constant="-51" id="zXW-Yc-S5W"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="oP0-Xl-Qla"/>
+                    </view>
                     <connections>
-                        <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="sceneView" destination="HSG-PW-wgc" id="TZu-iY-gvJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="add.png" width="128" height="128"/>
+        <image name="photos.png" width="418" height="418"/>
+        <image name="refresh.png" width="128" height="128"/>
+        <image name="setting.png" width="128" height="128"/>
+    </resources>
 </document>
