@@ -8,22 +8,27 @@
 
 import UIKit
 
+protocol ModelSettingDelegate: class{
+    func changeObjectColour(_ colour: String?)
+}
+
+
 class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,ColourPickerDelegate {
     
     
     @IBOutlet weak var optionTable: UITableView!
     
-    let modelSpec = ["color1","color2"]
-    var modelColour = ["#ff0000","00ff00"]
+    var modelSpec = [String]()
+    var modelColour = [String]()
+    weak var delegate: ModelSettingDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         optionTable.delegate = self
         optionTable.dataSource = self
-        print(modelColour[0])
     }
-    
+        
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return modelSpec.count
     }
@@ -45,8 +50,6 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let nav = segue.destination as? UINavigationController, let colour
-        
         if let destination = segue.destination as? ColourPicker {
             destination.delegate = self
             destination.initColor = hexStringToUIColor(hex: modelColour[(optionTable.indexPathForSelectedRow?.row)!])
@@ -77,9 +80,14 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
         )
     }
     
+    // Change the colour of the cell by changing the array
     func changeColour(_ colour: String?, _ index: Int?){
         modelColour[index!] = colour!
         self.optionTable.reloadData()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.changeObjectColour(modelColour[0])
     }
 
 }

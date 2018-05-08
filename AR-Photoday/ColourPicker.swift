@@ -71,19 +71,7 @@ class ColourPicker: UIViewController {
 extension ColourPicker: ChromaColorPickerDelegate{
     func colorPickerDidChooseColor(_ colorPicker: ChromaColorPicker, color: UIColor) {
         //Set color for the display view
-        colorDisplayView.backgroundColor = color
         colorCode = colorPicker.hexLabel.text
-        
-
-        //Perform zesty animation
-        UIView.animate(withDuration: 0.2,
-                       animations: {
-                        self.colorDisplayView.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-        }, completion: { (done) in
-            UIView.animate(withDuration: 0.2, animations: {
-                self.colorDisplayView.transform = CGAffineTransform.identity
-            })
-        })
         
         // Back to
         navigationController?.popViewController(animated: true)

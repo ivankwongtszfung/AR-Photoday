@@ -10,15 +10,34 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
-
-    @IBOutlet weak var sceneView: ARSCNView!
+class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     
+    @IBOutlet weak var sceneView: ARSCNView!
+    var colourArr = ["ff0000"]
+    var nameArr = ["Colour 1"]
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Set the view's delegate
         sceneView.delegate = self
+        
+        let scene = SCNScene()
+        
+        let box = SCNBox(width: 10, height: 10, length: 10, chamferRadius: 0)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = hexStringToUIColor(hex: colourArr[0])
+        box.materials = [material]
+
+        
+        let node = SCNNode()
+        node.position = SCNVector3(x:0,y:0.02,z:-0.1)
+        node.scale = SCNVector3(x:0.01,y:0.01,z:0.01)
+        node.geometry = box
+        
+        sceneView.scene.rootNode.addChildNode(node)
+        sceneView.autoenablesDefaultLighting = true
+
         
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
@@ -104,4 +123,41 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour.append(colourArr[0])
+            destination.modelSpec.append(nameArr[0])
+        }
+    }
+    
+    func changeObjectColour(_ colour: String?){
+        colourArr[0] = colour!
+    }
+
+
 }

@@ -62,7 +62,7 @@
                                 <state key="normal" title="Button" image="photos.png"/>
                                 <connections>
                                     <action selector="openAlbum:" destination="BV1-FR-VrT" eventType="touchUpInside" id="c2z-L4-CgT"/>
-                                    <segue destination="lBe-aW-ibT" kind="show" id="qpl-RS-uzE"/>
+                                    <segue destination="lBe-aW-ibT" kind="show" identifier="" id="qpl-RS-uzE"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggp-O3-De3">
@@ -200,26 +200,9 @@
                     <view key="view" contentMode="scaleToFill" id="ZnD-cD-xvB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMa-sB-tnW">
-                                <rect key="frame" x="142" y="557" width="90" height="90"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="90" id="pa8-JE-Nve"/>
-                                    <constraint firstAttribute="height" constant="90" id="uWc-ND-oa8"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" red="0.37254901959999998" green="0.4941176471" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="4bD-Jx-PGM" firstAttribute="bottom" secondItem="FMa-sB-tnW" secondAttribute="bottom" constant="20" id="N6D-Qj-wJP"/>
-                            <constraint firstItem="FMa-sB-tnW" firstAttribute="centerX" secondItem="ZnD-cD-xvB" secondAttribute="centerX" id="Plw-qd-I3I"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="4bD-Jx-PGM"/>
                     </view>
-                    <connections>
-                        <outlet property="colorDisplayView" destination="FMa-sB-tnW" id="QlP-z9-MpC"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pG5-hW-9nb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
