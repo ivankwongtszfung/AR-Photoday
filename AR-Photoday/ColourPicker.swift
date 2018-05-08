@@ -8,11 +8,19 @@
 
 import UIKit
 
+protocol ColourPickerDelegate: class{
+    func changeColour(_ colour: String?,_ index: Int?)
+}
+
 class ColourPicker: UIViewController {
     
     @IBOutlet weak var colorDisplayView: UIView!
-    var colorPicker: ChromaColorPicker!
-
+    var colourPicker: ChromaColorPicker!
+    var initColor: UIColor!
+    var arrayIndex: Int!
+    var colorCode: String!
+    weak var delegate: ColourPickerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,25 +29,30 @@ class ColourPicker: UIViewController {
         let pickerOrigin = CGPoint(x: view.bounds.midX - pickerSize.width/2, y: view.bounds.midY - pickerSize.height/2)
         
         /* Create Color Picker */
-        colorPicker = ChromaColorPicker(frame: CGRect(origin: pickerOrigin, size: pickerSize))
-        colorPicker.delegate = self as ChromaColorPickerDelegate
+        colourPicker = ChromaColorPicker(frame: CGRect(origin: pickerOrigin, size: pickerSize))
+        colourPicker.delegate = self as ChromaColorPickerDelegate
         
         /* Customize the view (optional) */
-        colorPicker.padding = 10
-        colorPicker.stroke = 3 //stroke of the rainbow circle
-        colorPicker.currentAngle = Float.pi
+        colourPicker.padding = 10
+        colourPicker.stroke = 3 //stroke of the rainbow circle
+        colourPicker.currentAngle = Float.pi
         
         /* Customize for grayscale (optional) */
-        colorPicker.supportsShadesOfGray = true // false by default
-        //colorPicker.colorToggleButton.grayColorGradientLayer.colors = [UIColor.lightGray.cgColor, UIColor.gray.cgColor] // You can also override gradient colors
+        colourPicker.supportsShadesOfGray = true // false by default
+        // colorPicker.colorToggleButton.grayColorGradientLayer.colors = [UIColor.lightGray.cgColor, UIColor.gray.cgColor]
+        // You can also override gradient colors
         
         
-        colorPicker.hexLabel.textColor = UIColor.white
+        colourPicker.hexLabel.textColor = UIColor.white
+        
+        colourPicker.adjustToColor(initColor)
+
+        colorCode = colourPicker.hexLabel.text
         
         /* Don't want an element like the shade slider? Just hide it: */
         //colorPicker.shadeSlider.hidden = true
         
-        self.view.addSubview(colorPicker)
+        self.view.addSubview(colourPicker)
 
         // Do any additional setup after loading the view.
     }
@@ -50,14 +63,18 @@ class ColourPicker: UIViewController {
     }
     
 
-
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.changeColour(colorCode, arrayIndex)
+    }
 }
 
 extension ColourPicker: ChromaColorPickerDelegate{
     func colorPickerDidChooseColor(_ colorPicker: ChromaColorPicker, color: UIColor) {
         //Set color for the display view
         colorDisplayView.backgroundColor = color
+        colorCode = colorPicker.hexLabel.text
         
+
         //Perform zesty animation
         UIView.animate(withDuration: 0.2,
                        animations: {
@@ -67,6 +84,13 @@ extension ColourPicker: ChromaColorPickerDelegate{
                 self.colorDisplayView.transform = CGAffineTransform.identity
             })
         })
+        
+        // Back to
+        navigationController?.popViewController(animated: true)
     }
+    
 }
+
+
+
 
