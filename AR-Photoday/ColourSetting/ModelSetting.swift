@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ModelSettingDelegate: class{
-    func changeObjectColour(_ colour: String?)
+    func changeObjectColour(_ colour: [String]!)
 }
 
 
@@ -87,7 +87,10 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        delegate?.changeObjectColour(modelColour[0])
+        delegate?.changeObjectColour(modelColour)
     }
+    
+
+    
 
 }

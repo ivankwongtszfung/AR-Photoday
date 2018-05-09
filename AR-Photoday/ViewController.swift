@@ -10,39 +10,56 @@ import UIKit
 import SceneKit
 import ARKit
 
+
 class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
-    
+
+
     @IBOutlet weak var sceneView: ARSCNView!
-    var colourArr = ["ff0000"]
-    var nameArr = ["Colour 1"]
+    var colourArr = ["ff0000","00ff00"]
+    var nameArr = ["Colour 1","Colour 2"]
+    
+    
+    var theColor = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Set the view's delegate
         sceneView.delegate = self
         
-        let scene = SCNScene()
+        //previous
+        //let scene = SCNScene()
+        let scene = SCNScene(named: "art.scnassets/BAwith2M.scn")!
         
-        let box = SCNBox(width: 10, height: 10, length: 10, chamferRadius: 0)
-        
-        let material = SCNMaterial()
-        material.diffuse.contents = hexStringToUIColor(hex: colourArr[0])
-        box.materials = [material]
-
-        
-        let node = SCNNode()
-        node.position = SCNVector3(x:0,y:0.02,z:-0.1)
-        node.scale = SCNVector3(x:0.01,y:0.01,z:0.01)
-        node.geometry = box
-        
-        sceneView.scene.rootNode.addChildNode(node)
-        sceneView.autoenablesDefaultLighting = true
 
         
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
+        
+        // retrieve the bridge node
+        let bridge = scene.rootNode.childNode(withName: "bridge", recursively: true)!
+        
+        // animate the 3d object
+        //bridge.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+
+        
+        // show statistics such as fps and timing information
+        sceneView.showsStatistics = true
+        
+        
+        // set the scene to the view
+        sceneView.scene = scene
+
+        
+        // add a tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        
+        
+        sceneView.addGestureRecognizer(tapGesture)
 
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -123,6 +140,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour=colourArr
+            destination.modelSpec=nameArr
+        }
+    }
     
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -145,19 +171,42 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
             alpha: CGFloat(1.0)
         )
     }
-
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? ModelSetting {
-            destination.delegate = self
-            destination.modelColour.append(colourArr[0])
-            destination.modelSpec.append(nameArr[0])
+    
+    func changeObjectColour(_ colour: [String]!) {
+        //case balloon arch
+        print("changing objet Color")
+        colourArr=colour
+        let bridge = sceneView.scene.rootNode.childNode(withName: "bridge", recursively: false)!
+        let firstColor = sceneView.scene.rootNode.childNode(withName: "first_Arc", recursively: true)!.childNodes[0]
+        let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!.childNodes[0]
+        firstColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[0])
+        secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
+    }
+    
+    
+    
+    @objc
+    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+        let ModelSetting = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as! ModelSetting
+        ModelSetting.modelColour = colourArr
+        ModelSetting.modelSpec = nameArr
+        self.navigationController?.pushViewController(ModelSetting, animated: true)
+    }
+    
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
+        } else {
+            return .all
         }
     }
     
-    func changeObjectColour(_ colour: String?){
-        colourArr[0] = colour!
-    }
 
 
 }
