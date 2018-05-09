@@ -100,13 +100,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     @IBAction func openSettings(_ sender: Any) {
     }
     
-    // Open photo album
-    @IBAction func openAlbum(_ sender: Any) {
-    }
-
     // Take a photo and save to album
     @IBAction func takePhoto(_ sender: Any) {
         let image = sceneView.snapshot()
+        
+        let shutterView = UIView(frame: sceneView.frame)
+        shutterView.backgroundColor = UIColor.black
+        view.addSubview(shutterView)
+        UIView.animate(withDuration: 0.3, animations: {
+            shutterView.alpha = 0
+        }, completion: { (_) in
+            shutterView.removeFromSuperview()
+        })
+
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         dismiss(animated: true, completion: nil)
     }
@@ -115,17 +121,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     @IBAction func addModel(_ sender: Any) {
     }
 
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    
+
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -61,7 +62,7 @@
                                 </constraints>
                                 <state key="normal" title="Button" image="photos.png"/>
                                 <connections>
-                                    <action selector="openAlbum:" destination="BV1-FR-VrT" eventType="touchUpInside" id="c2z-L4-CgT"/>
+                                    <segue destination="bU9-7k-6o8" kind="show" id="FWh-iU-oLK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggp-O3-De3">
@@ -115,6 +116,37 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="133.5832083958021"/>
+        </scene>
+        <!--Photo Gallery-->
+        <scene sceneID="AWg-S8-WG6">
+            <objects>
+                <viewController id="bU9-7k-6o8" customClass="PhotoGallery" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xtU-xj-Olk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8b1-Kg-rMa">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="8b1-Kg-rMa" secondAttribute="height" multiplier="125:201" id="caZ-ee-A7n"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="8b1-Kg-rMa" firstAttribute="width" secondItem="xtU-xj-Olk" secondAttribute="width" id="Lg5-ub-sRY"/>
+                            <constraint firstItem="8b1-Kg-rMa" firstAttribute="top" secondItem="1wp-ty-oBj" secondAttribute="top" id="Y5E-nO-uyZ"/>
+                            <constraint firstItem="8b1-Kg-rMa" firstAttribute="centerX" secondItem="xtU-xj-Olk" secondAttribute="centerX" id="ag9-09-123"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1wp-ty-oBj"/>
+                    </view>
+                    <connections>
+                        <outlet property="imgView" destination="8b1-Kg-rMa" id="bQJ-n4-c6y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nBi-Ne-tFH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2077.5999999999999" y="977.36131934032994"/>
         </scene>
         <!--Ballon Arch-->
         <scene sceneID="bUX-FD-F2I">
