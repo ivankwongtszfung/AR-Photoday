@@ -8,14 +8,25 @@
 
 import UIKit
 
-class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIDropInteractionDelegate {
 
     @IBOutlet weak var imgView: UIImageView!
     var image: UIImage! // a global var that stores image being shown on screen ready to share or edit
+    var editMode = false // tap -> add sticker
+
+    var path = UIBezierPath()
+    var startPoint = CGPoint()
+    var touchPoint = CGPoint()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showPhotoLibrary()
+//        imgView.clipsToBounds = true
+//        imgView.isMultipleTouchEnabled = false
+        imgView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
+        imgView.addGestureRecognizer(tapGesture)
+
         let optionButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(option))
         self.navigationItem.rightBarButtonItem = optionButton
     }
@@ -43,8 +54,8 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
 
 // =================== Option Function Start ===================
     @objc func option(){
-        if image?.size != nil{
-            let alert = UIAlertController(title: "Action", message: "", preferredStyle: .actionSheet)
+        if (image?.size != nil){
+            let alert = UIAlertController(title: "Action", message: nil, preferredStyle: .actionSheet)
             let cancelbutton = UIAlertAction(title: "Cancel", style: .cancel)
             let sharebutton = UIAlertAction(title: "Share", style: .default) { (_) in
                 self.share()
@@ -52,9 +63,9 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
             let editbutton = UIAlertAction(title: "Edit", style: .default) { (_) in
                 self.edit()
             }
-            
             alert.addAction(cancelbutton)
             alert.addAction(sharebutton)
+            alert.addAction(editbutton)
             present(alert,animated: true,completion: nil)
         }else{
             self.showPhotoLibrary()
@@ -68,8 +79,60 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     }
     
     func edit(){
-        print("edit")
+        editMode = true
+        
+        let donebutton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(finishEdit))
+        self.navigationItem.rightBarButtonItem = donebutton
+    }
+    
+    @objc func finishEdit(){
+        let optionButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(option))
+        self.navigationItem.rightBarButtonItem = optionButton
+        editMode = false
     }
 // =================== Option Function End ===================
-
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//            let touch = touches.first
+//            if let point = touch?.location(in: imgView){
+//                startPoint = point
+//            }
+//            path.move(to: startPoint)
+//            path.addLine(to: touchPoint)
+//            startPoint = touchPoint
+//            draw()
+//
+//    }
+//
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//            let touch = touches.first
+//            if let point = touch?.location(in: imgView){
+//                touchPoint = point
+//            }
+//
+//    }
+//
+//    func draw(){
+//        let strokeLayer = CAShapeLayer()
+//        strokeLayer.fillColor = nil
+//        strokeLayer.lineWidth = 5
+//        strokeLayer.strokeColor = UIColor.black.cgColor
+//        strokeLayer.path = path.cgPath
+//        imgView.layer.addSublayer(strokeLayer)
+//        imgView.setNeedsLayout()
+//    }
+    
+    @objc func tap(sender:UITapGestureRecognizer){
+        if(editMode == true){
+            if sender.state == .ended {
+                var touchLocation: CGPoint = sender.location(in: sender.view) //this is the location within imageview
+                let subImage = UIImageView(image: image)
+                
+                DispatchQueue.main.async {
+                    self.imgView.addSubview(subImage)
+                    subImage.frame = CGRect(x: touchLocation.x, y: touchLocation.y, width: 30, height: 30)
+                }
+            }
+        }
+    }
+    
 }
