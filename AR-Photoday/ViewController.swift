@@ -86,6 +86,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     // Take a photo and save to album
     @IBAction func takePhoto(_ sender: Any) {
         let image = sceneView.snapshot()
+        
+        let shutterView = UIView(frame: sceneView.frame)
+        shutterView.backgroundColor = UIColor.black
+        view.addSubview(shutterView)
+        UIView.animate(withDuration: 0.3, animations: {
+            shutterView.alpha = 0
+        }, completion: { (_) in
+            shutterView.removeFromSuperview()
+        })
+
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         dismiss(animated: true, completion: nil)
     }
