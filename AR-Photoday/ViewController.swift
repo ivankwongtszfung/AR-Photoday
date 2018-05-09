@@ -184,10 +184,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     
     @objc
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        let ModelSetting = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as! ModelSetting
-        ModelSetting.modelColour = colourArr
-        ModelSetting.modelSpec = nameArr
-        self.navigationController?.pushViewController(ModelSetting, animated: true)
+        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour=colourArr
+            destination.modelSpec=nameArr
+            self.navigationController?.pushViewController(destination, animated: true)
+        }
+        else{
+            print("storyboard dont contain modelsetting")
+        }
+
     }
     
     
