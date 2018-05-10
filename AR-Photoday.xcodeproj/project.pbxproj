@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E1B269220A49C2B007A5EA6 /* ModelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1B269120A49C2B007A5EA6 /* ModelsViewController.swift */; };
 		5E6BC31620A0325800E80A51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6BC31520A0325800E80A51 /* AppDelegate.swift */; };
 		5E6BC31820A0325800E80A51 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC31720A0325800E80A51 /* art.scnassets */; };
 		5E6BC31A20A0325800E80A51 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6BC31920A0325800E80A51 /* ViewController.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5E1B269120A49C2B007A5EA6 /* ModelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewController.swift; sourceTree = "<group>"; };
 		5E6BC31220A0325800E80A51 /* AR-Photoday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR-Photoday.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E6BC31520A0325800E80A51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E6BC31720A0325800E80A51 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				5E6BC31720A0325800E80A51 /* art.scnassets */,
 				5E6BC31920A0325800E80A51 /* ViewController.swift */,
 				5E6BC31B20A0325800E80A51 /* Main.storyboard */,
+				5E1B269120A49C2B007A5EA6 /* ModelsViewController.swift */,
 				F3E0F9EF20A3F02E000E2B6D /* stickerCollectionViewCell.swift */,
 				5E6BC31E20A0325900E80A51 /* Assets.xcassets */,
 				5E6BC32020A0325900E80A51 /* LaunchScreen.storyboard */,
@@ -219,6 +222,7 @@
 				ABEBB42320A18B1D00FFDC69 /* ChromaHandle.swift in Sources */,
 				5E6BC31A20A0325800E80A51 /* ViewController.swift in Sources */,
 				F3CBC7BA20A13D4D0081131D /* ColourPicker.swift in Sources */,
+				5E1B269220A49C2B007A5EA6 /* ModelsViewController.swift in Sources */,
 				F3978E1820A4844B00FDEEA3 /* ColourTexture.swift in Sources */,
 				ABEBB42420A18B1D00FFDC69 /* ChromaAddButton.swift in Sources */,
 				ABEBB41E20A18B1D00FFDC69 /* ChromaShadeSlider.swift in Sources */,
@@ -408,6 +412,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jk.edu.cuhk.cse.csci4140.group7.AR-Photoday";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "AR-Photoday/AR-Photoday-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
