@@ -8,24 +8,33 @@
 
 import UIKit
 
-class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIDropInteractionDelegate {
-
-    @IBOutlet weak var imgView: UIImageView!
+class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIDropInteractionDelegate,UIScrollViewDelegate {
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     var image: UIImage! // a global var that stores image being shown on screen ready to share or edit
     var editMode = false // tap -> add sticker
-
-    var path = UIBezierPath()
-    var startPoint = CGPoint()
-    var touchPoint = CGPoint()
+    var imgView: UIImageView!
+    
+    var newImgWidth: CGFloat = 0.0
+    var newImgHeight: CGFloat = 0.0
+    var viewWidth: CGFloat = 0.0
+    var viewHeight: CGFloat = 0.0
+    var leftMost: CGFloat = 0.0
+    var rightMost: CGFloat = 0.0
+    var topMost: CGFloat = 0.0
+    var bottomMost: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        scrollView.delegate = self
+
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 6.0
+        
         self.showPhotoLibrary()
-//        imgView.clipsToBounds = true
-//        imgView.isMultipleTouchEnabled = false
-        imgView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
-        imgView.addGestureRecognizer(tapGesture)
+        scrollView.isUserInteractionEnabled = true
+
 
         let optionButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(option))
         self.navigationItem.rightBarButtonItem = optionButton
@@ -45,11 +54,63 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imgView.image = image
+//        image = resizeImage(image: image)
+        imgView = UIImageView(image: image)
+        imgView.isUserInteractionEnabled = true
+        imgView.clipsToBounds = true
         imgView.contentMode = .scaleAspectFit
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
+        imgView.addGestureRecognizer(tapGesture)
+        imgView.frame = CGRect(x: 0, y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height)
+        
+        // Get the width and height of the resized image
+        viewWidth = imgView.bounds.size.width
+        let imgWidth = (imgView.image?.size.width)!
+        viewHeight = imgView.bounds.size.height
+        let imgHeight = (imgView.image?.size.height)!
+        let widthRatio = viewWidth / imgWidth;
+        let heightRatio = viewHeight / imgHeight;
+        let scale = min(widthRatio, heightRatio);
+        newImgWidth = scale * imgWidth;
+        newImgHeight = scale * imgHeight;
+        leftMost = (viewWidth - newImgWidth) / 2
+        rightMost = newImgWidth + leftMost
+        topMost = (viewHeight - newImgHeight) / 2
+        bottomMost = newImgHeight + topMost
+        
+        self.scrollView.addSubview(imgView)
         
         dismiss(animated: true, completion: nil)
     }
+    
+    func resizeImage(image: UIImage) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = self.scrollView.frame.width  / size.width
+        let heightRatio = self.scrollView.frame.height / size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+
+    
 // =================== Pick Image End ===================
 
 // =================== Option Function Start ===================
@@ -80,7 +141,6 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     
     func edit(){
         editMode = true
-        
         let donebutton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(finishEdit))
         self.navigationItem.rightBarButtonItem = donebutton
     }
@@ -91,48 +151,26 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
         editMode = false
     }
 // =================== Option Function End ===================
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//            let touch = touches.first
-//            if let point = touch?.location(in: imgView){
-//                startPoint = point
-//            }
-//            path.move(to: startPoint)
-//            path.addLine(to: touchPoint)
-//            startPoint = touchPoint
-//            draw()
-//
-//    }
-//
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//            let touch = touches.first
-//            if let point = touch?.location(in: imgView){
-//                touchPoint = point
-//            }
-//
-//    }
-//
-//    func draw(){
-//        let strokeLayer = CAShapeLayer()
-//        strokeLayer.fillColor = nil
-//        strokeLayer.lineWidth = 5
-//        strokeLayer.strokeColor = UIColor.black.cgColor
-//        strokeLayer.path = path.cgPath
-//        imgView.layer.addSublayer(strokeLayer)
-//        imgView.setNeedsLayout()
-//    }
-    
+// =================== Edit Function Start ===================
+
     @objc func tap(sender:UITapGestureRecognizer){
         if(editMode == true){
             if sender.state == .ended {
                 var touchLocation: CGPoint = sender.location(in: sender.view) //this is the location within imageview
                 let subImage = UIImageView(image: image)
                 
-                DispatchQueue.main.async {
-                    self.imgView.addSubview(subImage)
-                    subImage.frame = CGRect(x: touchLocation.x, y: touchLocation.y, width: 30, height: 30)
+                if(touchLocation.x > leftMost && touchLocation.x < rightMost && touchLocation.y > topMost && touchLocation.y < bottomMost){
+                    DispatchQueue.main.async {
+                        self.imgView.addSubview(subImage)
+                        subImage.frame = CGRect(x: touchLocation.x, y: touchLocation.y, width: 30, height: 30)
+                    }
                 }
+                
             }
         }
     }
-    
+// =================== Edit Function End ===================
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.imgView
+    }
 }
