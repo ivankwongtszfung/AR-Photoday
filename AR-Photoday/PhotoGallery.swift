@@ -22,12 +22,15 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     
     var newImgWidth: CGFloat = 0.0
     var newImgHeight: CGFloat = 0.0
+    var imgWidth: CGFloat = 0.0
+    var imgHeight: CGFloat = 0.0
     var viewWidth: CGFloat = 0.0
     var viewHeight: CGFloat = 0.0
     var leftMost: CGFloat = 0.0
     var rightMost: CGFloat = 0.0
     var topMost: CGFloat = 0.0
     var bottomMost: CGFloat = 0.0
+    var scale: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,16 +82,13 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     func resizeImage(image: UIImage) -> UIImage {
         let size = image.size
         
-        let widthRatio  = self.scrollView.frame.width  / size.width
-        let heightRatio = self.scrollView.frame.height / size.height
+        let widthRatio  = imgWidth  / size.width
+        let heightRatio = imgHeight / size.height
         
         // Figure out what our orientation is, and use that to form the rectangle
         var newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
+        newSize = CGSize(width: size.width * widthRatio, height: size.height * heightRatio)
+
         
         // This is the rect that we've calculated out and this is what is actually used below
         let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
@@ -149,13 +149,14 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
         
         imgView.layer.render(in: context!)
         
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+        var image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
-        
+
         UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
 
         editMode = false
+        navigationController?.popViewController(animated: true)
     }
 // =================== Option Function End ===================
 // =================== Edit Function Start ===================
@@ -187,18 +188,19 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
 // =================== Get boundary of new image Start ===================
     func imgBound(){
         viewWidth = imgView.bounds.size.width
-        let imgWidth = (imgView.image?.size.width)!
+        imgWidth = (imgView.image?.size.width)!
         viewHeight = imgView.bounds.size.height
-        let imgHeight = (imgView.image?.size.height)!
+        imgHeight = (imgView.image?.size.height)!
         let widthRatio = viewWidth / imgWidth;
         let heightRatio = viewHeight / imgHeight;
-        let scale = min(widthRatio, heightRatio);
+        scale = min(widthRatio, heightRatio);
         newImgWidth = scale * imgWidth;
         newImgHeight = scale * imgHeight;
         leftMost = (viewWidth - newImgWidth) / 2
         rightMost = newImgWidth + leftMost
         topMost = (viewHeight - newImgHeight) / 2
         bottomMost = newImgHeight + topMost
+
     }
 // =================== Get boundary of new image End ===================
 // =================== Sticker Start ===================
@@ -228,5 +230,4 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
         }
     }
 // =================== Sticker End ===================
-
 }
