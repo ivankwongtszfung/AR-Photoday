@@ -23,6 +23,8 @@
 		ABEBB42420A18B1D00FFDC69 /* ChromaAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41D20A18B1D00FFDC69 /* ChromaAddButton.swift */; };
 		F31F6C0A20A43AC30089BB05 /* PhotoGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31F6C0920A43AC30089BB05 /* PhotoGallery.swift */; };
 		F325749F20A03C8500371039 /* SnapButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F325749E20A03C8500371039 /* SnapButton.swift */; };
+		F3978E0E20A4820300FDEEA3 /* ChooseCTTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3978E0D20A4820300FDEEA3 /* ChooseCTTableViewCell.swift */; };
+		F3978E1820A4844B00FDEEA3 /* ColourTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3978E1720A4844B00FDEEA3 /* ColourTexture.swift */; };
 		F3CBC7BA20A13D4D0081131D /* ColourPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC7B920A13D4D0081131D /* ColourPicker.swift */; };
 		F3CBC7DD20A14A300081131D /* ModelSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC7DC20A14A2F0081131D /* ModelSetting.swift */; };
 		F3CBC7E020A14A880081131D /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CBC7DF20A14A880081131D /* CustomTableViewCell.swift */; };
@@ -49,6 +51,8 @@
 		ABEBB41D20A18B1D00FFDC69 /* ChromaAddButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaAddButton.swift; sourceTree = "<group>"; };
 		F31F6C0920A43AC30089BB05 /* PhotoGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoGallery.swift; sourceTree = "<group>"; };
 		F325749E20A03C8500371039 /* SnapButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapButton.swift; sourceTree = "<group>"; };
+		F3978E0D20A4820300FDEEA3 /* ChooseCTTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCTTableViewCell.swift; sourceTree = "<group>"; };
+		F3978E1720A4844B00FDEEA3 /* ColourTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourTexture.swift; sourceTree = "<group>"; };
 		F3CBC7B920A13D4D0081131D /* ColourPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourPicker.swift; sourceTree = "<group>"; };
 		F3CBC7DC20A14A2F0081131D /* ModelSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSetting.swift; sourceTree = "<group>"; };
 		F3CBC7DF20A14A880081131D /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 				5E6BC32020A0325900E80A51 /* LaunchScreen.storyboard */,
 				5E6BC32320A0325900E80A51 /* Info.plist */,
 				F3CBC7B920A13D4D0081131D /* ColourPicker.swift */,
+				F3978E1720A4844B00FDEEA3 /* ColourTexture.swift */,
 			);
 			path = "AR-Photoday";
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 			children = (
 				F3CBC7DC20A14A2F0081131D /* ModelSetting.swift */,
 				F3CBC7DF20A14A880081131D /* CustomTableViewCell.swift */,
+				F3978E0D20A4820300FDEEA3 /* ChooseCTTableViewCell.swift */,
 			);
 			path = ColourSetting;
 			sourceTree = "<group>";
@@ -213,12 +219,14 @@
 				ABEBB42320A18B1D00FFDC69 /* ChromaHandle.swift in Sources */,
 				5E6BC31A20A0325800E80A51 /* ViewController.swift in Sources */,
 				F3CBC7BA20A13D4D0081131D /* ColourPicker.swift in Sources */,
+				F3978E1820A4844B00FDEEA3 /* ColourTexture.swift in Sources */,
 				ABEBB42420A18B1D00FFDC69 /* ChromaAddButton.swift in Sources */,
 				ABEBB41E20A18B1D00FFDC69 /* ChromaShadeSlider.swift in Sources */,
 				F3CBC7E020A14A880081131D /* CustomTableViewCell.swift in Sources */,
 				5E6BC31620A0325800E80A51 /* AppDelegate.swift in Sources */,
 				F325749F20A03C8500371039 /* SnapButton.swift in Sources */,
 				ABEBB41F20A18B1D00FFDC69 /* UIColor+Utilities.swift in Sources */,
+				F3978E0E20A4820300FDEEA3 /* ChooseCTTableViewCell.swift in Sources */,
 				F3E0F9F020A3F02E000E2B6D /* stickerCollectionViewCell.swift in Sources */,
 				F3CBC7DD20A14A300081131D /* ModelSetting.swift in Sources */,
 				F31F6C0A20A43AC30089BB05 /* PhotoGallery.swift in Sources */,
