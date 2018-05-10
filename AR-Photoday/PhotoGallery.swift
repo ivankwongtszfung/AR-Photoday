@@ -18,7 +18,7 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
     var image: UIImage! // a global var that stores image being shown on screen ready to share or edit
     var editMode = false // tap -> add sticker
     var imgView: UIImageView!
-    var selectedSticker = -1
+    var selectedSticker = 0
     
     var newImgWidth: CGFloat = 0.0
     var newImgHeight: CGFloat = 0.0
@@ -142,6 +142,19 @@ class PhotoGallery: UIViewController,UIImagePickerControllerDelegate,UINavigatio
         let optionButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(option))
         self.navigationItem.rightBarButtonItem = optionButton
         self.stickerGallery.isHidden = true
+        
+        UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, false, UIScreen.main.scale)
+        
+        let context = UIGraphicsGetCurrentContext()
+        
+        imgView.layer.render(in: context!)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
+
         editMode = false
     }
 // =================== Option Function End ===================

@@ -15,7 +15,7 @@ class stickerCollectionViewCell: UICollectionViewCell {
         didSet{
             if self.isSelected{
                 self.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-                self.contentView.backgroundColor = UIColor.grey
+                self.contentView.backgroundColor = UIColor.black
             }else{
                 self.transform = CGAffineTransform.identity
                 self.contentView.backgroundColor = UIColor.white
