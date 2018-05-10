@@ -16,12 +16,7 @@ class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     @IBOutlet weak var modelCollectionView: UICollectionView!
     
-    // Load a model from assets
-    func loadModel(name: String) -> SCNNode {
-        let scene = SCNScene(named: name, inDirectory: "art.scnassets", options: nil)!
-        return scene.rootNode
-    }
-    
+    static let segueIdentifier = "AddModel"
     let models = ["BAwith2M.scn"]
     let model_icons = ["arch1"]
 
@@ -31,8 +26,9 @@ class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.modelCollectionView.dataSource = self
     }
     
+    // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return models.count
+        return model_icons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -42,8 +38,32 @@ class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         return cell
     }
+ 
+    // MARK: - Unwind segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let sd = sender as? UICollectionViewCell {
+            let vc = segue.destination as! ViewController
+            let idx = self.modelCollectionView.indexPath(for: sd)![1]
+            vc.chosenModel = models[idx]
+        }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch(identifier) {
+        case ModelsViewController.segueIdentifier:
+            // Make sure the sender is a cell, and there is an item in selected index
+            guard let sd = sender as? UICollectionViewCell else { return false }
+            let idx = self.modelCollectionView.indexPath(for: sd)![1]
+            // Make sure not out of index
+            return idx < models.count
+        default:
+            return false
+        }
+    }
+    
 }
 
+// MARK: - Model Cells
 class ModelCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     

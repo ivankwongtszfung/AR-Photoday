@@ -21,6 +21,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     
     var theColor = true
     
+    var chosenModel: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -88,6 +90,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
+    }
+    
+    // MARK: - Unwind segue
+    @IBAction func unwind(_ segue: UIStoryboardSegue) {
+        switch(segue.identifier) {
+        case "AddModel":
+            // Load model
+            print(chosenModel)
+            guard let scene = SCNScene(named: chosenModel, inDirectory: "art.scnassets", options: nil) else { return }
+            let sceneNode = scene.rootNode
+            // Add model
+            // TODO
+            break
+        default:
+            break
+        }
     }
     
     // MARK: - UI button actions

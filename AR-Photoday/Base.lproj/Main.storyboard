@@ -160,6 +160,7 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="Usj-Wk-jnF" id="cKC-eG-OC5"/>
+                                            <segue destination="wMH-zb-Jwm" kind="unwind" identifier="AddModel" unwindAction="unwind:" id="8gU-zg-hbK"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -179,6 +180,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zxG-bj-JJD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="wMH-zb-Jwm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1076" y="920"/>
         </scene>
