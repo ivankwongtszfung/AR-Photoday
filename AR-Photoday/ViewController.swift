@@ -221,6 +221,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     }
     
     func openNetvigatorController(input :UIAlertAction) ->Void {
+        if(colourArr.isEmpty || nameArr.isEmpty)
+        {
+            print("color array and name array should not be empty.")
+            return
+        }
         if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
             destination.delegate = self
             destination.modelColour=colourArr
@@ -228,7 +233,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
             self.navigationController?.pushViewController(destination, animated: true)
         }
         else{
-            print("storyboard dont contain modelsetting")
+            print("storyboard dont contain modelsetting  identifier")
         }
         return
 
