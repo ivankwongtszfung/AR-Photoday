@@ -212,7 +212,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
             print("Deleting node "+name)
             node.removeFromParentNode()
         }
-        let optionAction = UIAlertAction(title: "Options", style: .default, handler: openNetvigatorController)
+        let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         dialog.addAction(deleteAction)
         dialog.addAction(optionAction)
@@ -220,7 +220,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         self.present(dialog, animated: true, completion: nil)
     }
     
-    func openNetvigatorController(input :UIAlertAction) ->Void {
+    func openModelSettingController(input :UIAlertAction) ->Void {
         if(colourArr.isEmpty || nameArr.isEmpty)
         {
             print("color array and name array should not be empty.")
@@ -238,6 +238,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         return
 
     }
+    
+    func openOptionPage(input:UIAlertAction)->Void{
+        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "OptionPage") as? ColourTexture {
+            //destination.delegate = self
+            self.navigationController?.pushViewController(destination, animated: true)
+        }
+        else{
+            print("storyboard dont contain OptionPage identifier")
+        }
+        return
+    }
+    
+    
     
     
     override var prefersStatusBarHidden: Bool {

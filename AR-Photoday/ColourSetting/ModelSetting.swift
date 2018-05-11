@@ -18,6 +18,7 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     
     @IBOutlet weak var optionTable: UITableView!
     
+    var modelName = String()
     var modelSpec = [String]()
     var modelColour = [String]()
     weak var delegate: ModelSettingDelegate?

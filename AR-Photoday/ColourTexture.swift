@@ -8,8 +8,22 @@
 
 import UIKit
 
-class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,ModelSettingDelegate {
+    
+    enum IntParsingError: Error {
+        case overflow
+        case invalidInput(String)
+    }
+    
+    func changeObjectColour(_ colour: [String]!) {
+        ///implmenting modelsetting delegate
+    }
 
+    var colourArr = ["ff0000","00ff00"]
+    var optionArr = ["Colour":["colour 1","colour 2"],"Texture":["texture 1","texture 2"]]
+    var theColor = true
+    
+    
     @IBOutlet weak var table: UITableView!
     let arr = ["Colour","Texture"]
     override func viewDidLoad() {
@@ -46,8 +60,34 @@ class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource 
             cell.accessoryType = .checkmark
             // When the cell is selected
             // Should present segue here
+            
+            guard let name = cell.textLabel?.text else{ return }
+            openModelSettingController(option: name)
+            
+            
         }
     }
+    
+    func openModelSettingController(option : String) ->Void{
+        if(colourArr.isEmpty || optionArr.isEmpty)
+        {
+            print("color array and name array should not be empty.")
+            return
+        }
+        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
+            destination.delegate = self
+            destination.modelName=option
+            destination.modelColour=colourArr
+            destination.modelSpec=optionArr[option]!
+            self.navigationController?.pushViewController(destination, animated: true)
+        }
+        else{
+            print("storyboard dont contain modelsetting identifier")
+        }
+        return
+        
+    }
+    
 
 
 

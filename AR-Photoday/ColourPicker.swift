@@ -68,6 +68,8 @@ class ColourPicker: UIViewController {
     }
 }
 
+
+
 extension ColourPicker: ChromaColorPickerDelegate{
     func colorPickerDidChooseColor(_ colorPicker: ChromaColorPicker, color: UIColor) {
         //Set color for the display view
