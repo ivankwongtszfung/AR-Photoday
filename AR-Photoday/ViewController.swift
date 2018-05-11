@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 
-class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
+class ViewController: UIViewController, ModelSettingDelegate {
 
 
     @IBOutlet weak var sceneView: ARSCNView!
@@ -64,11 +64,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
 
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
         // Run the view's session
-        sceneView.session.run(configuration)
+        setUpSceneView(for: sceneView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -105,7 +102,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         view.automaticallyUpdatesLighting = true
     }
     
-    // MARK: - Unwind segue
+    // MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour=colourArr
+            destination.modelSpec=nameArr
+        }
+    }
+    
+    // MARK: Unwind segue
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
         switch(segue.identifier) {
         case "AddModel":
@@ -147,12 +153,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         dismiss(animated: true, completion: nil)
     }
-    
-    // Add a new model
-    @IBAction func addModel(_ sender: Any) {
-    }
 
-
+    // MARK: - ARSessionObserver
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -168,15 +170,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         
     }
 
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? ModelSetting {
-            destination.delegate = self
-            destination.modelColour=colourArr
-            destination.modelSpec=nameArr
-        }
-    }
-    
+    // MARK: - Other functions
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -242,4 +236,57 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     
 
 
+}
+
+// ############################################################################################
+// MARK: - ARSCNViewDelegate
+extension ViewController: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("Adding plane")
+        
+        // 1. Get plane anchor
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
+        // 2. Set up plane
+        let width = CGFloat(planeAnchor.extent.x)
+        let height = CGFloat(planeAnchor.extent.z)
+        let plane = SCNPlane(width: width, height: height)
+        
+        // 3. Set plane color
+        plane.materials.first?.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        
+        // 4. Bind plane to node
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.name = "plane"
+        let x = Float(planeAnchor.center.x)
+        let y = Float(planeAnchor.center.y)
+        let z = Float(planeAnchor.center.z)
+        planeNode.position = SCNVector3Make(x, y, z)
+        planeNode.eulerAngles.x = -.pi / 2
+//        planeNode.isHidden = !self.isAdding
+        
+        // 5. Add plane node
+        node.addChildNode(planeNode)
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        // Update plane
+        // 1. Get plane anchors and plane
+        guard let planeAnchor = anchor as? ARPlaneAnchor,
+            let planeNode = node.childNodes.first,
+            let plane = planeNode.geometry as? SCNPlane
+            else { return }
+        
+        // 2. Update plane width and depth
+        let width = CGFloat(planeAnchor.extent.x)
+        let depth = CGFloat(planeAnchor.extent.z)
+        plane.width = width
+        plane.height = depth
+        
+        // 3. Update plane node position
+        let x = CGFloat(planeAnchor.center.x)
+        let y = CGFloat(planeAnchor.center.y)
+        let z = CGFloat(planeAnchor.center.z)
+        planeNode.position = SCNVector3(x, y, z)
+    }
 }

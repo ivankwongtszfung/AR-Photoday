@@ -50,7 +50,6 @@
                                 </constraints>
                                 <state key="normal" image="add.png"/>
                                 <connections>
-                                    <action selector="addModel:" destination="BV1-FR-VrT" eventType="touchUpInside" id="9Cp-Wd-AyA"/>
                                     <segue destination="tdV-3h-WQy" kind="show" id="Fgy-qr-ESB"/>
                                 </connections>
                             </button>
