@@ -22,6 +22,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var theColor = true
     
     var chosenModel: String = ""
+    var nodeToAdd: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,20 +37,12 @@ class ViewController: UIViewController, ModelSettingDelegate {
         // Build scene view's scene
         let scene = SCNScene()
         
-        // Dummy: Add bridge node to scene
-        let bridgeScene = SCNScene(named: "art.scnassets/BAwith2M.scn")!
-        let bridgeNode = bridgeScene.rootNode
-        scene.rootNode.addChildNode(bridgeNode)
-        
-        // animate the 3d object
-        //bridge.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-        
         // set the scene to the view
         sceneView.scene = scene
 
         
         // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(singleTapHandler(_:)))
         
         
         sceneView.addGestureRecognizer(tapGesture)
@@ -116,11 +109,15 @@ class ViewController: UIViewController, ModelSettingDelegate {
         switch(segue.identifier) {
         case "AddModel":
             // Load model
-            print(chosenModel)
+            print("Chosen model: " + chosenModel)
             guard let scene = SCNScene(named: chosenModel, inDirectory: "art.scnassets", options: nil) else { return }
-            let sceneNode = scene.rootNode
-            // Add model
-            // TODO
+            // Pack model contents to a new node
+            nodeToAdd = SCNNode.init()
+            for node in scene.rootNode.childNodes as [SCNNode] {
+                nodeToAdd!.addChildNode(node)
+            }
+            // Show available planes, ready to receive for tap action (see @singleTapHandler)
+            toggleNodeVisibility(name: "plane", in: sceneView, visibility: true)
             break
         default:
             break
@@ -171,6 +168,15 @@ class ViewController: UIViewController, ModelSettingDelegate {
     }
 
     // MARK: - Other functions
+    func toggleNodeVisibility(name: String, in view: ARSCNView, visibility: Bool) {
+        // Set all nodes with the specified name to have specified visibility
+        view.scene.rootNode.enumerateChildNodes {(node,_) in
+            if node.name == name {
+                node.isHidden = !visibility
+            }
+        }
+    }
+    
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -205,20 +211,28 @@ class ViewController: UIViewController, ModelSettingDelegate {
         secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
     }
     
-    
-    
+    // MARK: - Gesture handlers
     @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
-            destination.delegate = self
-            destination.modelColour=colourArr
-            destination.modelSpec=nameArr
-            self.navigationController?.pushViewController(destination, animated: true)
+    func singleTapHandler(_ recognizer: UIGestureRecognizer) {
+        // Add a model node to scene
+        if let objNode = nodeToAdd {
+            // 1. Retrieve hit test results
+            let tapLocation = recognizer.location(in: sceneView)
+            let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+            
+            // 2. Get target position
+            guard let hitTestResult = hitTestResults.first else { return }
+            let translation = hitTestResult.worldTransform.columns.3
+            
+            // 3. Add object to the plane
+            objNode.position = SCNVector3(translation.x, translation.y, translation.z)
+            sceneView.scene.rootNode.addChildNode(objNode)
+            
+            // 4. Hide planes, reset nodeToAdd and chosen model
+            toggleNodeVisibility(name: "plane", in: sceneView, visibility: false)
+            nodeToAdd = nil
+            chosenModel = ""
         }
-        else{
-            print("storyboard dont contain modelsetting")
-        }
-
     }
     
     
@@ -263,7 +277,7 @@ extension ViewController: ARSCNViewDelegate {
         let z = Float(planeAnchor.center.z)
         planeNode.position = SCNVector3Make(x, y, z)
         planeNode.eulerAngles.x = -.pi / 2
-//        planeNode.isHidden = !self.isAdding
+        planeNode.isHidden = (self.nodeToAdd == nil)
         
         // 5. Add plane node
         node.addChildNode(planeNode)
