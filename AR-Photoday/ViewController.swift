@@ -26,20 +26,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        //previous
-        //let scene = SCNScene()
-        let scene = SCNScene(named: "art.scnassets/BAwith2M.scn")!
-        
 
         
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
         
-        // retrieve the bridge node
-        let bridge = scene.rootNode.childNode(withName: "bridge", recursively: true)!
+        // Build scene view's scene
+        let scene = SCNScene()
+        
+        // Dummy: Add bridge node to scene
+        let bridgeScene = SCNScene(named: "art.scnassets/BAwith2M.scn")!
+        let bridgeNode = bridgeScene.rootNode
+        scene.rootNode.addChildNode(bridgeNode)
         
         // animate the 3d object
         //bridge.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
