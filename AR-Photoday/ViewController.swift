@@ -26,10 +26,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
+        
+        // Set up scene view
+        setUpSceneView(for: sceneView)
+        configLighting(for: sceneView)
         
         // Build scene view's scene
         let scene = SCNScene()
@@ -41,11 +43,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         
         // animate the 3d object
         //bridge.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-
-        
-        // show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        
         
         // set the scene to the view
         sceneView.scene = scene
@@ -88,6 +85,24 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
+    }
+    
+    // MARK: - Scene view settings
+    // Set up a AR scene view
+    func setUpSceneView(for view: ARSCNView) {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        view.session.run(configuration)
+        
+        view.delegate = self
+        view.showsStatistics = true // Show statistics such as fps and timing information
+        view.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+    }
+    
+    // Configure lighting issues
+    func configLighting(for view: ARSCNView) {
+        view.autoenablesDefaultLighting = true
+        view.automaticallyUpdatesLighting = true
     }
     
     // MARK: - Unwind segue
