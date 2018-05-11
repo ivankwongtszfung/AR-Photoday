@@ -17,9 +17,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     @IBOutlet weak var sceneView: ARSCNView!
     var colourArr = ["ff0000","00ff00"]
     var nameArr = ["Colour 1","Colour 2"]
-    
-    
     var theColor = true
+    
+    var ELIGIBLE_OBJ = ["Sphere","bridge"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,10 +52,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
 
         
         // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        //i leave the  code for easy to distinguish coding parts
+        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        //sceneView.addGestureRecognizer(tapGesture)
         
-        
-        sceneView.addGestureRecognizer(tapGesture)
+        // Double tap gesture recognizer
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.doubleTapHandler(with:)))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        sceneView.addGestureRecognizer(doubleTapRecognizer)
 
     }
     
@@ -180,10 +184,43 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
     }
     
+    func findHitNode(recognizer: UIGestureRecognizer, view: SCNView) -> SCNNode? {
+        let location = recognizer.location(in: view)
+        let hitTestResults = view.hitTest(location)
+        //debug
+        let name = hitTestResults.first?.node.name
+   
+        return hitTestResults.first?.node
+    }
     
+    func strMatchArray(array: Array<String>,node: SCNNode)->Bool{
+        
+        guard let string = node.name else{
+            return false
+        }
+        return array.contains { (element) -> Bool in return string.contains(element) }
+    }
     
-    @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+    @objc func doubleTapHandler(with recognizer: UIGestureRecognizer) {
+        // Make sure the node is eligible (has a name)
+        guard let node = findHitNode(recognizer: recognizer, view: sceneView), let name = node.name,
+            strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+
+        // Show action sheet
+        let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
+            print("Deleting node "+name)
+            node.removeFromParentNode()
+        }
+        let optionAction = UIAlertAction(title: "Options", style: .default, handler: openNetvigatorController)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        dialog.addAction(deleteAction)
+        dialog.addAction(optionAction)
+        dialog.addAction(cancelAction)
+        self.present(dialog, animated: true, completion: nil)
+    }
+    
+    func openNetvigatorController(input :UIAlertAction) ->Void {
         if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
             destination.delegate = self
             destination.modelColour=colourArr
@@ -193,6 +230,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         else{
             print("storyboard dont contain modelsetting")
         }
+        return
 
     }
     
