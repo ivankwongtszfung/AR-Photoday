@@ -19,7 +19,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var nameArr = ["Colour 1","Colour 2"]
     var theColor = true
     
-    var ELIGIBLE_OBJ = ["bubbleArch"]
+    let ELIGIBLE_OBJ = ["Sphere","bridge"]
+    var ELIGIBLE_MODEL = ["bubbleArch"]
 
     var chosenModel: String = ""
     var nodeToAdd: SCNNode?
@@ -222,14 +223,36 @@ class ViewController: UIViewController, ModelSettingDelegate {
         secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
     }
     
-    // Find the selected node by performing hit test
-    func findHitNode(recognizer: UIGestureRecognizer, view: SCNView) -> SCNNode? {
+    // Find the selected node recursively by performing hit test
+    func findHitNode(recognizer: UIGestureRecognizer, view: SCNView, recursively: Bool) -> SCNNode? {
         let location = recognizer.location(in: view)
         let hitTestResults = view.hitTest(location)
-        //debug
-        let name = hitTestResults.first?.node.name
-   
-        return hitTestResults.first?.node.parent
+        
+        if recursively {
+            // Loop all hit test result before it gives up
+            for hitTestResult in hitTestResults {
+                var node = hitTestResult.node
+                // Perform a DFS search of nodes, until it searches the SCNView's root node
+                while (node != view.scene?.rootNode) {
+    //                if let name = node.name { print("Searching node: " + name) }
+                    if strMatchArray(array: ELIGIBLE_MODEL, node: node) {
+    //                    if let name = node.name { print("Selecting node: " + name) }
+                        return node
+                    } else {
+                        // Search its parent node
+                        node = node.parent!
+                    }
+                }
+            }
+//            print("No node found")
+            return nil
+        } else {
+            // For changing color or material
+            //debug
+            let name = hitTestResults.first?.node.name
+            
+            return hitTestResults.first?.node
+        }
     }
     
     func strMatchArray(array: Array<String>,node: SCNNode)->Bool{
@@ -327,7 +350,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     @objc func doubleTapHandler(with recognizer: UIGestureRecognizer) {
         // Make sure the node is eligible (has a name)
-        guard let node = findHitNode(recognizer: recognizer, view: sceneView), let name = node.name,
+        guard let node = findHitNode(recognizer: recognizer, view: sceneView, recursively: false), let name = node.name,
             strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
         
         // Show action sheet
@@ -348,7 +371,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         switch(recognizer.state) {
         case .began:
             // Ensure the node is eligible
-            guard let node = findHitNode(recognizer: recognizer, view: sceneView), strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+            guard let node = findHitNode(recognizer: recognizer, view: sceneView, recursively: true) else { return }
             selectedNode = node
             break
         case .changed:
@@ -374,7 +397,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         switch(recognizer.state) {
         case .began:
             // Ensure the node is eligible
-            guard let node = findHitNode(recognizer: recognizer, view: sceneView), strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+            guard let node = findHitNode(recognizer: recognizer, view: sceneView, recursively: true) else { return }
             selectedNode = node
             break
         case .changed:
