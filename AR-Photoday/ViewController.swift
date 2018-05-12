@@ -19,10 +19,12 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var nameArr = ["Colour 1","Colour 2"]
     var theColor = true
     
-    var ELIGIBLE_OBJ = ["Sphere","bridge"]
+    var ELIGIBLE_OBJ = ["bubbleArch"]
 
     var chosenModel: String = ""
     var nodeToAdd: SCNNode?
+    
+    var selectedNode: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,14 @@ class ViewController: UIViewController, ModelSettingDelegate {
         let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.doubleTapHandler(with:)))
         doubleTapRecognizer.numberOfTapsRequired = 2
         sceneView.addGestureRecognizer(doubleTapRecognizer)
+        
+        // Pinch gesture recognizer
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinchHandler(with:)))
+        sceneView.addGestureRecognizer(pinchRecognizer)
+        
+        // Rotation gesture recognizer
+        let rotationRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(self.rotationHandler(with:)))
+        sceneView.addGestureRecognizer(rotationRecognizer)
     }
     
     
@@ -87,7 +97,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         
         view.delegate = self
         view.showsStatistics = true // Show statistics such as fps and timing information
-        view.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        view.debugOptions = []
     }
     
     // Configure lighting issues
@@ -219,7 +229,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         //debug
         let name = hitTestResults.first?.node.name
    
-        return hitTestResults.first?.node
+        return hitTestResults.first?.node.parent
     }
     
     func strMatchArray(array: Array<String>,node: SCNNode)->Bool{
@@ -332,6 +342,58 @@ class ViewController: UIViewController, ModelSettingDelegate {
         dialog.addAction(optionAction)
         dialog.addAction(cancelAction)
         self.present(dialog, animated: true, completion: nil)
+    }
+    
+    @objc func pinchHandler(with recognizer: UIPinchGestureRecognizer) {
+        switch(recognizer.state) {
+        case .began:
+            // Ensure the node is eligible
+            guard let node = findHitNode(recognizer: recognizer, view: sceneView), strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+            selectedNode = node
+            break
+        case .changed:
+            // 1. Ensure there is a selected node
+            guard let node = selectedNode else { return }
+            
+            // 2. Do scale action
+            let action = SCNAction.scale(by: recognizer.scale, duration: 0.1)
+            node.runAction(action)
+            recognizer.scale = 1
+            break
+        case .ended:
+            // Clear the selected node
+            selectedNode = nil
+            break
+        default:
+            break
+        }
+        
+    }
+    
+    @objc func rotationHandler(with recognizer: UIRotationGestureRecognizer) {
+        switch(recognizer.state) {
+        case .began:
+            // Ensure the node is eligible
+            guard let node = findHitNode(recognizer: recognizer, view: sceneView), strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+            selectedNode = node
+            break
+        case .changed:
+            // 1. Ensure there is a selected node
+            guard let node = selectedNode else { return }
+            
+            // 2. Do rotation
+            let rotation = CGFloat(-1*recognizer.rotation)
+            let action = SCNAction.rotateBy(x: 0, y: rotation, z: 0, duration: 0.1)
+            node.runAction(action)
+            recognizer.rotation = 0
+            break
+        case .ended:
+            // Clear the selected node
+            selectedNode = nil
+            break
+        default:
+            break
+        }
     }
 
 }
