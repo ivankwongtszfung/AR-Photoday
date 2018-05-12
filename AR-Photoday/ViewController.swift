@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 
-class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
+class ViewController: UIViewController, ModelSettingDelegate {
 
 
     @IBOutlet weak var sceneView: ARSCNView!
@@ -20,47 +20,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     var theColor = true
     
     var ELIGIBLE_OBJ = ["Sphere","bridge"]
+
+    var chosenModel: String = ""
+    var nodeToAdd: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        //previous
-        //let scene = SCNScene()
-        let scene = SCNScene(named: "art.scnassets/BAwith2M.scn")!
-        
-
-        
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
         
-        // retrieve the bridge node
-        let bridge = scene.rootNode.childNode(withName: "bridge", recursively: true)!
+        // Set up scene view
+        setUpSceneView(for: sceneView)
+        configLighting(for: sceneView)
         
-        // animate the 3d object
-        //bridge.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-
-        
-        // show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        
+        // Build scene view's scene
+        let scene = SCNScene()
         
         // set the scene to the view
         sceneView.scene = scene
 
-        
-        // add a tap gesture recognizer
-        //i leave the  code for easy to distinguish coding parts
-        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        //sceneView.addGestureRecognizer(tapGesture)
+        // Single tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(singleTapHandler(_:)))
+        sceneView.addGestureRecognizer(tapGesture)
         
         // Double tap gesture recognizer
         let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.doubleTapHandler(with:)))
         doubleTapRecognizer.numberOfTapsRequired = 2
         sceneView.addGestureRecognizer(doubleTapRecognizer)
-
     }
     
     
@@ -71,11 +58,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
 
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
         // Run the view's session
-        sceneView.session.run(configuration)
+        setUpSceneView(for: sceneView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -92,6 +76,53 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
+    }
+    
+    // MARK: - Scene view settings
+    // Set up a AR scene view
+    func setUpSceneView(for view: ARSCNView) {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        view.session.run(configuration)
+        
+        view.delegate = self
+        view.showsStatistics = true // Show statistics such as fps and timing information
+        view.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+    }
+    
+    // Configure lighting issues
+    func configLighting(for view: ARSCNView) {
+        view.autoenablesDefaultLighting = true
+        view.automaticallyUpdatesLighting = true
+    }
+    
+    // MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour=colourArr
+            destination.modelSpec=nameArr
+        }
+    }
+    
+    // MARK: Unwind segue
+    @IBAction func unwind(_ segue: UIStoryboardSegue) {
+        switch(segue.identifier) {
+        case "AddModel":
+            // Load model
+            print("Chosen model: " + chosenModel)
+            guard let scene = SCNScene(named: chosenModel, inDirectory: "art.scnassets", options: nil) else { return }
+            // Clone node contents to a new node
+            let newNode = scene.rootNode.clone()
+            newNode.geometry = scene.rootNode.geometry?.copy() as? SCNGeometry
+            nodeToAdd = newNode
+            
+            // Show available planes, ready to receive for tap action (see @singleTapHandler)
+            toggleNodeVisibility(name: "plane", in: sceneView, visibility: true)
+            break
+        default:
+            break
+        }
     }
     
     // MARK: - UI button actions
@@ -120,12 +151,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         dismiss(animated: true, completion: nil)
     }
-    
-    // Add a new model
-    @IBAction func addModel(_ sender: Any) {
-    }
 
-
+    // MARK: - ARSessionObserver
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -141,12 +168,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         
     }
 
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? ModelSetting {
-            destination.delegate = self
-            destination.modelColour=colourArr
-            destination.modelSpec=nameArr
+    // MARK: - Other functions
+    func toggleNodeVisibility(name: String, in view: ARSCNView, visibility: Bool) {
+        // Set all nodes with the specified name to have specified visibility
+        view.scene.rootNode.enumerateChildNodes {(node,_) in
+            if node.name == name {
+                node.isHidden = !visibility
+            }
         }
     }
     
@@ -184,6 +212,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
     }
     
+    // Find the selected node by performing hit test
     func findHitNode(recognizer: UIGestureRecognizer, view: SCNView) -> SCNNode? {
         let location = recognizer.location(in: view)
         let hitTestResults = view.hitTest(location)
@@ -199,25 +228,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
             return false
         }
         return array.contains { (element) -> Bool in return string.contains(element) }
-    }
-    
-    @objc func doubleTapHandler(with recognizer: UIGestureRecognizer) {
-        // Make sure the node is eligible (has a name)
-        guard let node = findHitNode(recognizer: recognizer, view: sceneView), let name = node.name,
-            strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
-
-        // Show action sheet
-        let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
-            print("Deleting node "+name)
-            node.removeFromParentNode()
-        }
-        let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        dialog.addAction(deleteAction)
-        dialog.addAction(optionAction)
-        dialog.addAction(cancelAction)
-        self.present(dialog, animated: true, completion: nil)
     }
     
     func openModelSettingController(input :UIAlertAction) ->Void {
@@ -236,7 +246,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
             print("storyboard dont contain modelsetting  identifier")
         }
         return
-
     }
     
     func openOptionPage(input:UIAlertAction)->Void{
@@ -250,9 +259,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         return
     }
     
-    
-    
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -265,6 +271,120 @@ class ViewController: UIViewController, ARSCNViewDelegate, ModelSettingDelegate{
         }
     }
     
+    // MARK: - Gesture handlers
+    @objc func singleTapHandler(_ recognizer: UIGestureRecognizer) {
+        // Case: Adding a model node to scene
+        if let objNode = nodeToAdd {
+            // 1. Retrieve hit test plane results
+            let tapLocation = recognizer.location(in: sceneView)
+            let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+            
+            // 2. Find if a plane or a random point is selected
+            var hitTestResult: ARHitTestResult?
+            if hitTestResults.count > 0 {
+                print("Adding on a plane")
+                // Location is on the plane
+                hitTestResult = hitTestResults.first
+            } else {
+                // Try to find on feature points
+                let hitTestPoints = sceneView.hitTest(tapLocation, types: .featurePoint)
+                if hitTestPoints.count > 0 {
+                    print("Adding on a feature point")
+                    // Location is a random point
+                    hitTestResult = hitTestPoints.first
+                }
+            }
+            
+            // 3. If there is a valid hit test result, place the object node there
+            if let result = hitTestResult {
+                // Get target position
+                let translation = result.worldTransform.columns.3
+                
+                // Add object to the plane
+                objNode.position = SCNVector3(translation.x, translation.y, translation.z)
+                sceneView.scene.rootNode.addChildNode(objNode)
+            } else {
+                // Display fail message
+                print("No point is selected!")
+            }
+            
+            // 4. Hide planes, reset nodeToAdd and chosen model
+            toggleNodeVisibility(name: "plane", in: sceneView, visibility: false)
+            nodeToAdd = nil
+            chosenModel = ""
+        }
+    }
+    
+    @objc func doubleTapHandler(with recognizer: UIGestureRecognizer) {
+        // Make sure the node is eligible (has a name)
+        guard let node = findHitNode(recognizer: recognizer, view: sceneView), let name = node.name,
+            strMatchArray(array: ELIGIBLE_OBJ,node: node) else { return }
+        
+        // Show action sheet
+        let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
+            print("Deleting node "+name)
+            node.removeFromParentNode()
+        }
+        let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        dialog.addAction(deleteAction)
+        dialog.addAction(optionAction)
+        dialog.addAction(cancelAction)
+        self.present(dialog, animated: true, completion: nil)
+    }
 
+}
 
+// ############################################################################################
+// MARK: - ARSCNViewDelegate
+extension ViewController: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        print("Adding plane")
+        
+        // 1. Get plane anchor
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
+        // 2. Set up plane
+        let width = CGFloat(planeAnchor.extent.x)
+        let height = CGFloat(planeAnchor.extent.z)
+        let plane = SCNPlane(width: width, height: height)
+        
+        // 3. Set plane color
+        plane.materials.first?.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        
+        // 4. Bind plane to node
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.name = "plane"
+        let x = Float(planeAnchor.center.x)
+        let y = Float(planeAnchor.center.y)
+        let z = Float(planeAnchor.center.z)
+        planeNode.position = SCNVector3Make(x, y, z)
+        planeNode.eulerAngles.x = -.pi / 2
+        planeNode.isHidden = (self.nodeToAdd == nil)
+        
+        // 5. Add plane node
+        node.addChildNode(planeNode)
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        // Update plane
+        // 1. Get plane anchors and plane
+        guard let planeAnchor = anchor as? ARPlaneAnchor,
+            let planeNode = node.childNodes.first,
+            let plane = planeNode.geometry as? SCNPlane
+            else { return }
+        
+        // 2. Update plane width and depth
+        let width = CGFloat(planeAnchor.extent.x)
+        let depth = CGFloat(planeAnchor.extent.z)
+        plane.width = width
+        plane.height = depth
+        
+        // 3. Update plane node position
+        let x = CGFloat(planeAnchor.center.x)
+        let y = CGFloat(planeAnchor.center.y)
+        let z = CGFloat(planeAnchor.center.z)
+        planeNode.position = SCNVector3(x, y, z)
+    }
 }
