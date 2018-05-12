@@ -214,19 +214,40 @@ class ViewController: UIViewController, ModelSettingDelegate {
     // MARK: - Gesture handlers
     @objc
     func singleTapHandler(_ recognizer: UIGestureRecognizer) {
-        // Add a model node to scene
+        // Case: Adding a model node to scene
         if let objNode = nodeToAdd {
-            // 1. Retrieve hit test results
+            // 1. Retrieve hit test plane results
             let tapLocation = recognizer.location(in: sceneView)
             let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
             
-            // 2. Get target position
-            guard let hitTestResult = hitTestResults.first else { return }
-            let translation = hitTestResult.worldTransform.columns.3
+            // 2. Find if a plane or a random point is selected
+            var hitTestResult: ARHitTestResult?
+            if hitTestResults.count > 0 {
+                print("Adding on a plane")
+                // Location is on the plane
+                hitTestResult = hitTestResults.first
+            } else {
+                // Try to find on feature points
+                let hitTestPoints = sceneView.hitTest(tapLocation, types: .featurePoint)
+                if hitTestPoints.count > 0 {
+                    print("Adding on a feature point")
+                    // Location is a random point
+                    hitTestResult = hitTestPoints.first
+                }
+            }
             
-            // 3. Add object to the plane
-            objNode.position = SCNVector3(translation.x, translation.y, translation.z)
-            sceneView.scene.rootNode.addChildNode(objNode)
+            // 3. If there is a valid hit test result, place the object node there
+            if let result = hitTestResult {
+                // Get target position
+                let translation = result.worldTransform.columns.3
+                
+                // Add object to the plane
+                objNode.position = SCNVector3(translation.x, translation.y, translation.z)
+                sceneView.scene.rootNode.addChildNode(objNode)
+            } else {
+                // Display fail message
+                print("No point is selected!")
+            }
             
             // 4. Hide planes, reset nodeToAdd and chosen model
             toggleNodeVisibility(name: "plane", in: sceneView, visibility: false)
