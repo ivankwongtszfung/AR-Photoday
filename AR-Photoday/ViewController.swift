@@ -111,11 +111,11 @@ class ViewController: UIViewController, ModelSettingDelegate {
             // Load model
             print("Chosen model: " + chosenModel)
             guard let scene = SCNScene(named: chosenModel, inDirectory: "art.scnassets", options: nil) else { return }
-            // Pack model contents to a new node
-            nodeToAdd = SCNNode.init()
-            for node in scene.rootNode.childNodes as [SCNNode] {
-                nodeToAdd!.addChildNode(node)
-            }
+            // Clone node contents to a new node
+            let newNode = scene.rootNode.clone()
+            newNode.geometry = scene.rootNode.geometry?.copy() as? SCNGeometry
+            nodeToAdd = newNode
+            
             // Show available planes, ready to receive for tap action (see @singleTapHandler)
             toggleNodeVisibility(name: "plane", in: sceneView, visibility: true)
             break
