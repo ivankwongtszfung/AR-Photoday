@@ -59,6 +59,10 @@ class ViewController: UIViewController, ModelSettingDelegate {
         // Rotation gesture recognizer
         let rotationRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(self.rotationHandler(with:)))
         sceneView.addGestureRecognizer(rotationRecognizer)
+        
+        // Pan gesture recognizer
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panHandler(with:)))
+        sceneView.addGestureRecognizer(panRecognizer)
     }
     
     
@@ -409,6 +413,36 @@ class ViewController: UIViewController, ModelSettingDelegate {
             let action = SCNAction.rotateBy(x: 0, y: rotation, z: 0, duration: 0.1)
             node.runAction(action)
             recognizer.rotation = 0
+            break
+        case .ended:
+            // Clear the selected node
+            selectedNode = nil
+            break
+        default:
+            break
+        }
+    }
+    
+    @objc func panHandler(with recognizer: UIPanGestureRecognizer) {
+        switch(recognizer.state) {
+        case .began:
+            // Ensure the node is eligible
+            guard let node = findHitNode(recognizer: recognizer, view: sceneView, recursively: true) else { return }
+            selectedNode = node
+            break
+        case .changed:
+            // Ensure there is a selected node
+            guard let node = selectedNode else { return }
+            
+            // Get current pan location
+            let location = recognizer.location(in: recognizer.view)
+            let hitTestResults = sceneView.hitTest(location, types: ARHitTestResult.ResultType.existingPlane)
+            guard let hitTestResult: ARHitTestResult = hitTestResults.first else { return }
+            let worldPos = hitTestResult.worldTransform.columns.3
+
+            // Move the node to current location
+            let position = SCNVector3Make(worldPos.x, worldPos.y, worldPos.z)
+            node.position = position
             break
         case .ended:
             // Clear the selected node
