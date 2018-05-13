@@ -12,7 +12,7 @@ import SceneKit
 
 private let reuseIdentifier = "Cell"
 
-class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var modelCollectionView: UICollectionView!
     
@@ -24,6 +24,16 @@ class ModelsViewController: UIViewController, UICollectionViewDelegate, UICollec
         super.viewDidLoad()
         self.modelCollectionView.delegate = self
         self.modelCollectionView.dataSource = self
+    }
+    
+    // MARK: - UICollectionViewDelegateFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // Set width according to fixed column number
+        // Reference: https://stackoverflow.com/questions/40826242/
+        let nColumns: CGFloat = 3, cellSpacing: CGFloat = 10
+        let width = collectionView.bounds.size.width / nColumns - cellSpacing
+        let height = width
+        return CGSize(width: width, height: height)
     }
     
     // MARK: - UICollectionViewDataSource
