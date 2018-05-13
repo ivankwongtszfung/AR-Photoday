@@ -141,9 +141,44 @@ class ViewController: UIViewController, ModelSettingDelegate {
     }
     
     // MARK: - UI button actions
-    // Reload the scene (re-initialize all models)
+    // Reload the scene (restart or just remove all models)
     @IBAction func reloadScene(_ sender: Any) {
-        print("Reloading")
+        let configuration = self.sceneView.session.configuration!
+        
+        // Pause the session
+        sceneView.session.pause()
+        
+        // Show action sheet
+        let dialog = UIAlertController(title: nil, message: "Choose an Action", preferredStyle: .actionSheet)
+        let removeModelAction = UIAlertAction(title: "Remove all models", style: .destructive) { (_) in
+            // Delete all eligible nodes
+            self.sceneView.scene.rootNode.enumerateChildNodes {(node,_) in
+                if self.strMatchArray(array: self.ELIGIBLE_OBJ, node: node) || self.strMatchArray(array: self.ELIGIBLE_MODEL, node: node) {
+                    node.removeFromParentNode()
+                }
+            }
+            // Resume the session
+            self.sceneView.session.run(configuration)
+            print("Status: All models deleted")
+            return
+        }
+        let restartAction = UIAlertAction(title: "Restart the app", style: .destructive) { (_) in
+            // Delete all nodes
+            self.sceneView.scene.rootNode.enumerateChildNodes {(node,_) in
+                node.removeFromParentNode()
+            }
+            // Start the session again
+            self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            print("Status: App restarted")
+            return
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            self.sceneView.session.run(configuration)
+        }
+        dialog.addAction(removeModelAction)
+        dialog.addAction(restartAction)
+        dialog.addAction(cancelAction)
+        self.present(dialog, animated: true, completion: nil)
     }
     
     // Open settings page
