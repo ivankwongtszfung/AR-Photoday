@@ -110,7 +110,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="pbb-VM-gmT"/>
                     <connections>
+                        <outlet property="add" destination="fct-uc-Edg" id="soG-vy-mag"/>
+                        <outlet property="gallery" destination="Ecc-hm-CcE" id="xgV-6C-dd9"/>
+                        <outlet property="refresh" destination="ggp-O3-De3" id="lQ1-MK-iCg"/>
                         <outlet property="sceneView" destination="HSG-PW-wgc" id="TZu-iY-gvJ"/>
+                        <outlet property="setting" destination="nF1-DM-2pN" id="pcD-hB-wqe"/>
+                        <outlet property="snap" destination="dBJ-Qv-iRX" id="3Ux-YM-OTj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

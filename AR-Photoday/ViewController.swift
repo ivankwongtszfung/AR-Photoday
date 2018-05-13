@@ -9,11 +9,17 @@
 import UIKit
 import SceneKit
 import ARKit
+import ReplayKit
 
 
 class ViewController: UIViewController, ModelSettingDelegate {
 
 
+    @IBOutlet weak var setting: UIButton!
+    @IBOutlet weak var refresh: UIButton!
+    @IBOutlet weak var gallery: UIButton!
+    @IBOutlet weak var add: UIButton!
+    @IBOutlet weak var snap: SnapButton!
     @IBOutlet weak var sceneView: ARSCNView!
     var colourArr = ["ff0000","00ff00"]
     var nameArr = ["Colour 1","Colour 2"]
@@ -26,6 +32,9 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var nodeToAdd: SCNNode?
     
     var selectedNode: SCNNode?
+    
+    let recorder = RPScreenRecorder.shared()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +72,11 @@ class ViewController: UIViewController, ModelSettingDelegate {
         // Pan gesture recognizer
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panHandler(with:)))
         sceneView.addGestureRecognizer(panRecognizer)
+        
+        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(record(sender:)))
+        snap.addGestureRecognizer(longGesture)
+        sceneView.addGestureRecognizer(tapGesture)
+
     }
     
     
@@ -541,4 +555,44 @@ extension ViewController: ARSCNViewDelegate {
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
     }
+    
+    @objc func record(sender : UIGestureRecognizer){
+        if sender.state == .ended {
+            snap.isHidden = false
+            setting.isHidden = false
+            refresh.isHidden = false
+            gallery.isHidden = false
+            add.isHidden = false
+            recorder.stopRecording(){ (previewVC, error) in
+                if let previewVC = previewVC{
+                    previewVC.previewControllerDelegate = self
+                    self.present(previewVC,animated: true,completion: nil)
+                }
+                
+                if let error = error{
+                    print("error")
+                }
+            }
+        }
+        else if sender.state == .began {
+            snap.isHidden = true
+            setting.isHidden = true
+            refresh.isHidden = true
+            gallery.isHidden = true
+            add.isHidden = true
+            recorder.startRecording(){ (error) in
+                if let error = error {
+                    print("error occur")
+                }
+            }
+        }
+    }
+
 }
+
+extension ViewController: RPPreviewViewControllerDelegate{
+    func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
