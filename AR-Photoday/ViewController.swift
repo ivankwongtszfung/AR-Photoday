@@ -11,6 +11,8 @@ import SceneKit
 import ARKit
 import ReplayKit
 import Toast_Swift
+import Photos
+import AVFoundation
 
 class ViewController: UIViewController, ModelSettingDelegate {
 
@@ -37,7 +39,9 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     let recorder = RPScreenRecorder.shared()
     
-    var toastStyle: ToastStyle = ToastStyle()
+    var toastStyle = ToastStyle(), toastImportantStyle = ToastStyle()
+    
+    enum permission { case camera, album }
 
     // MARK: - ViewController
     override func viewDidLoad() {
@@ -83,12 +87,29 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
         // Set up Toast settings
         toastStyle.maxWidthPercentage = 0.9
+        toastStyle.messageAlignment = .center
+        toastImportantStyle = toastStyle
+        toastImportantStyle.backgroundColor = .red
         ToastManager.shared.style = toastStyle
         ToastManager.shared.position = .top
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Ensure camera permission is granted
+        let permission = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        switch(permission) {
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: AVMediaType.video) { (granted) in
+                if !granted { self.requestPermission(permission: ViewController.permission.camera) }
+            }
+            break
+        case .authorized:
+            break
+        default:
+            requestPermission(permission: ViewController.permission.camera)
+        }
         
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
@@ -151,6 +172,24 @@ class ViewController: UIViewController, ModelSettingDelegate {
         }
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch(identifier) {
+        case "SelectModel":
+            // If in normal mode: Go to choose model
+            if nodeToAdd == nil { return true }
+            else {
+                // If in add mode: return to cancel mode
+                clearNodeToAdd(in: sceneView)
+                print("Cancelled adding")
+                self.showToast("Cancelled adding")
+                return false
+            }
+        default:
+            print("Unrecognized segue identifier: \(identifier)")
+            return false
+        }
+    }
+    
     // MARK: Unwind segue
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
         switch(segue.identifier) {
@@ -168,7 +207,10 @@ class ViewController: UIViewController, ModelSettingDelegate {
             
             // Ready to receive for tap action (see @singleTapHandler)
             let name = nodeToAdd?.name ?? ""
-            self.view.makeToast("Tap on a plane/point to add model \(name)")
+            self.showToast("Tap on a plane/point to add model \(name)")
+            
+            // Change add button to cancel button
+            self.add.transform = self.add.transform.rotated(by: .pi/4)
             break
         default:
             break
@@ -194,7 +236,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             }
             // Resume the session
             self.sceneView.session.run(configuration)
-            self.view.makeToast("All models removed")
+            self.showToast("All models removed")
             return
         }
         let restartAction = UIAlertAction(title: "Restart the app", style: .destructive) { (_) in
@@ -204,7 +246,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             }
             // Start the session again
             self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-            self.view.makeToast("App restarted")
+            self.showToast("App restarted")
             return
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
@@ -233,7 +275,19 @@ class ViewController: UIViewController, ModelSettingDelegate {
             shutterView.removeFromSuperview()
         })
 
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        let permission = PHPhotoLibrary.authorizationStatus()
+        switch(permission) {
+        case .authorized:
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            break
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { (status) in
+                if status == PHAuthorizationStatus.authorized { UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) }
+            }
+            break
+        default:
+            requestPermission(permission: ViewController.permission.album)
+        }
         dismiss(animated: true, completion: nil)
     }
     
@@ -251,7 +305,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
                     self.present(previewVC,animated: true,completion: nil)
                 }
                 if let error = error {
-                    self.view.makeToast("Error when stopping recording")
+                    self.showToast("Error when stopping recording")
                     print(error)
                 }
             }
@@ -264,7 +318,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             add.isHidden = true
             recorder.startRecording(){ (error) in
                 if let error = error {
-                    self.view.makeToast("Error when recording")
+                    self.showToast("Error when recording")
                     print(error)
                 }
             }
@@ -417,6 +471,52 @@ class ViewController: UIViewController, ModelSettingDelegate {
         return
     }
     
+    // Request permission from user (if not permitted)
+    func requestPermission(permission: permission) {
+        // Hide previous toasts
+        self.view.hideAllToasts()
+        // Show permission grant toast
+        self.view.makeToast("Permission needed. \nClick for information", duration: 5, style: toastImportantStyle) { (didTap) in
+            if didTap {
+                var requestText: String
+                switch(permission) {
+                case .album:
+                    requestText = "Album permission is used for adding and accessing photos.\nClick \"Photos\" then click \"Read and Write\" access."
+                case .camera:
+                    requestText = "Camera permission is required in this app.\nClick the switch button on the \"Camera\" row."
+                }
+                let dialog = UIAlertController(title: "Permission Request", message: requestText, preferredStyle: .alert)
+                let goAction = UIAlertAction(title: "Go to Settings", style: .default) { (_) in
+                    if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                        UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+                    }
+                }
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                dialog.addAction(goAction)
+                dialog.addAction(cancelAction)
+                self.present(dialog, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    // Return add mode to cancel mode
+    func clearNodeToAdd(in view: ARSCNView) {
+        // Hide planes, reset nodeToAdd and chosen model
+        toggleNodeVisibility(name: "plane", in: view, visibility: false)
+        nodeToAdd = nil
+        chosenModel = ""
+        // Change cancel button back to add button
+        self.add.transform = self.add.transform.rotated(by: .pi/4)
+    }
+    
+    // Show a simple new toast
+    func showToast(_ msg: String) {
+        // Hide previous toasts
+        self.view.hideAllToasts()
+        // Show new toast
+        self.view.makeToast(msg)
+    }
+    
     // MARK: - Gesture handlers
     @objc func singleTapHandler(_ recognizer: UIGestureRecognizer) {
         // Case: Adding a model node to scene
@@ -429,14 +529,14 @@ class ViewController: UIViewController, ModelSettingDelegate {
             // 2. Find if a plane or a random point is selected
             var hitTestResult: ARHitTestResult?
             if hitTestResults.count > 0 {
-                self.view.makeToast("Model \(name) added on a plane")
+                self.showToast("Model \(name) added on a plane")
                 // Location is on the plane
                 hitTestResult = hitTestResults.first
             } else {
                 // Try to find on feature points
                 let hitTestPoints = sceneView.hitTest(tapLocation, types: .featurePoint)
                 if hitTestPoints.count > 0 {
-                    self.view.makeToast("Model \(name) added on a point")
+                    self.showToast("Model \(name) added on a point")
                     // Location is a random point
                     hitTestResult = hitTestPoints.first
                 }
@@ -450,15 +550,13 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 // Add object to the plane
                 objNode.position = SCNVector3(translation.x, translation.y, translation.z)
                 sceneView.scene.rootNode.addChildNode(objNode)
+                
+                // Return add mode to normal mode
+                clearNodeToAdd(in: sceneView)
             } else {
                 // Display fail message
-                self.view.makeToast("Try to place the model again")
+                self.showToast("Try to place the model again")
             }
-            
-            // 4. Hide planes, reset nodeToAdd and chosen model
-            toggleNodeVisibility(name: "plane", in: sceneView, visibility: false)
-            nodeToAdd = nil
-            chosenModel = ""
         }
     }
     
@@ -471,7 +569,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
             node.removeFromParentNode()
-            self.view.makeToast("Model \(name) deleted")
+            self.showToast("Model \(name) deleted")
         }
         let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
