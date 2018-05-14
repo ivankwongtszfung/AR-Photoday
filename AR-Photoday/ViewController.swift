@@ -642,7 +642,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             guard let node = selectedNode else { return }
             
             // 2. Do rotation
-            let rotation = CGFloat(-1*recognizer.rotation)
+            let rotation = CGFloat(recognizer.rotation)
             let action = SCNAction.rotateBy(x: 0, y: rotation, z: 0, duration: 0.1)
             node.runAction(action)
             recognizer.rotation = 0
