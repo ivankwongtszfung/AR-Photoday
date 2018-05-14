@@ -119,7 +119,7 @@ class TexturePicker: UICollectionViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         print("changing the texture code")
-        if(textureCode!=nil){
+        if(!textureCode.isEmpty){
             delegate?.changeTexture(textureCode, arrayIndex)
             
         }

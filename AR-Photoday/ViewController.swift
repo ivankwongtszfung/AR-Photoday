@@ -14,6 +14,8 @@ import Toast_Swift
 
 class ViewController: UIViewController, ModelSettingDelegate {
 
+    
+
 
     @IBOutlet weak var setting: UIButton!
     @IBOutlet weak var refresh: UIButton!
@@ -145,6 +147,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? ColourTexture {
             destination.delegate = self
+            print("segue prepare")
         }
     }
     
@@ -316,19 +319,36 @@ class ViewController: UIViewController, ModelSettingDelegate {
         )
     }
     
-    func changeObjectColour(_ colour: [String]!) {
+    func changeObjectColour(_ colour: [String]!, _ model: String) {
         //case balloon arch
         print("changing object Color")
         colourArr=colour
-        let bridge = sceneView.scene.rootNode.childNode(withName: "bridge", recursively: true)!
-        let firstColor = sceneView.scene.rootNode.childNode(withName: "first_Arc", recursively: true)!.childNodes[0]
-        let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!.childNodes[0]
-        //        firstColor.geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
-        //        secondColor.geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[1])
-        firstColor.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
-        secondColor.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
-        firstColor.geometry!.firstMaterial!.lightingModel = .physicallyBased
-        secondColor.geometry!.firstMaterial!.lightingModel = .physicallyBased
+        print(model)
+        if sceneView.scene.rootNode.childNode(withName: "bridge", recursively: true) != nil{
+            let firstColor = sceneView.scene.rootNode.childNode(withName: "first_Arc", recursively: true)!
+            let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!
+            print(model)
+            if(model == "Texture"){
+                print(firstColor.childNodes.count)
+                print(secondColor.childNodes.count)
+                firstColor.enumerateChildNodes { node, _ in
+                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
+                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
+                }
+                secondColor.enumerateChildNodes { node, _ in
+                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
+                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
+                }
+            }
+            else if(model == "Colour"){
+                firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
+                secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[1])
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
+            }
+            return
+        }
+        
         
         
         //UIImage(named: “earth.jpg”)
@@ -394,7 +414,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     func openOptionPage(input:UIAlertAction)->Void{
         if let destination = self.storyboard?.instantiateViewController(withIdentifier: "OptionPage") as? ColourTexture {
-            //destination.delegate = self
+            destination.delegate = self
             self.navigationController?.pushViewController(destination, animated: true)
         }
         else{
@@ -520,42 +540,12 @@ class ViewController: UIViewController, ModelSettingDelegate {
     }
     
     
-    func openModelSettingController(input :UIAlertAction) ->Void {
-        if(colourArr.isEmpty || nameArr.isEmpty)
-        {
-            print("color array and name array should not be empty.")
-            return
-        }
-        
-        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
-            destination.delegate = self
-            destination.modelColour=colourArr
-            destination.modelSpec=nameArr
-            self.navigationController?.pushViewController(destination, animated: true)
-        }
-        else{
-            print("storyboard dont contain modelsetting  identifier")
-        }
-        return
-        
-    }
-    
     func openColourTextureController(input :UIAlertAction) ->Void
     {
         performSegue(withIdentifier: "OptionPage", sender: self)
         return
     }
     
-    func openOptionPage(input:UIAlertAction)->Void{
-        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "OptionPage") as? ColourTexture {
-            destination.delegate = self
-            self.navigationController?.pushViewController(destination, animated: true)
-        }
-        else{
-            print("storyboard dont contain OptionPage identifier")
-        }
-        return
-    }
     
     @objc func panHandler(with recognizer: UIPanGestureRecognizer) {
         switch(recognizer.state) {

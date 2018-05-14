@@ -8,18 +8,23 @@
 
 import UIKit
 
-class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,ModelSettingDelegate {
+class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,ModelSettingDelegate {    
 
-    func changeObjectColour(_ colour: [String]!) {
+    func changeObjectColour(_ colour: [String]!,_ model: String) {
         //set the colour array
-        if(colourArr != colour){
-            colourArr=colour
-            navigationController?.popViewController(animated: true)
-        }
+        print("changing objected begin:")
+        print(colour)
+        print(model)
+        colourArr=colour
+        modelOption=model
+        
+        print("changing objected end:")
+
 
     }
 
     var colourArr = ["ff0000","00ff00"]
+    var modelOption = String()
     var optionArr = ["Colour":["colour 1","colour 2"],"Texture":["texture 1","texture 2"]]
     var theColor = true
     weak var delegate: ModelSettingDelegate?
@@ -96,7 +101,7 @@ class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,
         if self.isMovingFromParentViewController {
             print("we are coming back to view controller")
             //pass data by delegate
-            delegate?.changeObjectColour(colourArr)
+            delegate?.changeObjectColour(colourArr, modelOption)
             
         }
     }

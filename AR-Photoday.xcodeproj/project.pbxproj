@@ -15,6 +15,8 @@
 		5E6BC31F20A0325900E80A51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC31E20A0325900E80A51 /* Assets.xcassets */; };
 		5E6BC32220A0325900E80A51 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC32020A0325900E80A51 /* LaunchScreen.storyboard */; };
 		5E6BC32A20A0349A00E80A51 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC32920A0349A00E80A51 /* .gitignore */; };
+		AB5019FA20A9855100048F41 /* TexturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5019F820A9855000048F41 /* TexturePicker.swift */; };
+		AB5019FB20A9855100048F41 /* TextureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5019F920A9855000048F41 /* TextureCell.swift */; };
 		AB5DA70A20A97A4E007011BD /* Pods-AR-Photoday.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 052483BD7A106EAC51EF6585 /* Pods-AR-Photoday.debug.xcconfig */; };
 		AB5DA70B20A97A51007011BD /* Pods-AR-Photoday.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 08408CD115FEE58A487610C8 /* Pods-AR-Photoday.release.xcconfig */; };
 		ABEBB41E20A18B1D00FFDC69 /* ChromaShadeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41620A18B1D00FFDC69 /* ChromaShadeSlider.swift */; };
@@ -48,6 +50,8 @@
 		5E6BC32120A0325900E80A51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E6BC32320A0325900E80A51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E6BC32920A0349A00E80A51 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		AB5019F820A9855000048F41 /* TexturePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TexturePicker.swift; sourceTree = "<group>"; };
+		AB5019F920A9855000048F41 /* TextureCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureCell.swift; sourceTree = "<group>"; };
 		ABEBB41620A18B1D00FFDC69 /* ChromaShadeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaShadeSlider.swift; sourceTree = "<group>"; };
 		ABEBB41720A18B1D00FFDC69 /* UIColor+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Utilities.swift"; sourceTree = "<group>"; };
 		ABEBB41820A18B1D00FFDC69 /* ChromaColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromaColorPicker.h; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				5E6BC32020A0325900E80A51 /* LaunchScreen.storyboard */,
 				5E6BC32320A0325900E80A51 /* Info.plist */,
 				F3CBC7B920A13D4D0081131D /* ColourPicker.swift */,
+				AB5019F820A9855000048F41 /* TexturePicker.swift */,
+				AB5019F920A9855000048F41 /* TextureCell.swift */,
 				F3978E1720A4844B00FDEEA3 /* ColourTexture.swift */,
 			);
 			path = "AR-Photoday";
@@ -295,9 +301,11 @@
 				F3978E1820A4844B00FDEEA3 /* ColourTexture.swift in Sources */,
 				ABEBB42420A18B1D00FFDC69 /* ChromaAddButton.swift in Sources */,
 				ABEBB41E20A18B1D00FFDC69 /* ChromaShadeSlider.swift in Sources */,
+				AB5019FA20A9855100048F41 /* TexturePicker.swift in Sources */,
 				F3CBC7E020A14A880081131D /* CustomTableViewCell.swift in Sources */,
 				5E6BC31620A0325800E80A51 /* AppDelegate.swift in Sources */,
 				F325749F20A03C8500371039 /* SnapButton.swift in Sources */,
+				AB5019FB20A9855100048F41 /* TextureCell.swift in Sources */,
 				ABEBB41F20A18B1D00FFDC69 /* UIColor+Utilities.swift in Sources */,
 				F3978E0E20A4820300FDEEA3 /* ChooseCTTableViewCell.swift in Sources */,
 				F3E0F9F020A3F02E000E2B6D /* stickerCollectionViewCell.swift in Sources */,

@@ -9,19 +9,23 @@
 import UIKit
 
 protocol ModelSettingDelegate: class{
-    func changeObjectColour(_ colour: [String]!)
+    func changeObjectColour(_ colour: [String]!,_ model: String)
 }
 
 
-class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,ColourPickerDelegate {
+class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,ColourPickerDelegate,TexturePickerDelegate {
     
     
     @IBOutlet weak var optionTable: UITableView!
     
+
     var modelName = String()
     var modelSpec = [String]()
     var modelColour = [String]()
+    
+    var modelViewController = ["Texture":"showTexture","Colour":"showColour"]
     weak var delegate: ModelSettingDelegate?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +41,21 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = optionTable.dequeueReusableCell(withIdentifier: "cell") as! CustomTableViewCell
         cell.modelName.text = modelSpec[indexPath.row]
-        cell.modelColour.backgroundColor = hexStringToUIColor(hex: modelColour[indexPath.row])
+        switch modelName {
+        case "Texture":
+            //since the modelName will change by default so i dont perform any action
+            // if we want to preview texture we can do it here
+            break
+        case "Colour":
+            cell.modelColour.backgroundColor = hexStringToUIColor(hex: modelColour[indexPath.row])
+            break
+        default:
+            let alertController = UIAlertController(title: "oops", message:
+                "we can only choose texture and colour", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            break
+        }
         
         // disable hightlight effect
         cell.selectionStyle = .none
@@ -47,13 +65,25 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedIndex = indexPath.row
-        performSegue(withIdentifier: "showColour", sender: self)
+        //perform segue by modelName which is set in the option calss
+        
+        if let vc = modelViewController[modelName] {
+            // now val is not nil and the Optional has been unwrapped, so use it
+            performSegue(withIdentifier: vc, sender: self)
+        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? ColourPicker {
             destination.delegate = self
             destination.initColor = hexStringToUIColor(hex: modelColour[(optionTable.indexPathForSelectedRow?.row)!])
+            destination.arrayIndex = (optionTable.indexPathForSelectedRow?.row)!
+        }
+        else if let destination = segue.destination as? TexturePicker{
+            //perform segue to texture picker
+            //set all the data to the colour texture class
+            destination.delegate = self
             destination.arrayIndex = (optionTable.indexPathForSelectedRow?.row)!
         }
     }
@@ -81,17 +111,37 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
         )
     }
     
+    
     // Change the colour of the cell by changing the array
     func changeColour(_ colour: String?, _ index: Int?){
-        if(!colour.isEmpty){
-            modelColour[index!] = colour!
-            self.optionTable.reloadData()
+        modelColour[index!] = colour!
+        self.optionTable.reloadData()
+    }
+    //get the name of the texture
+    func getNameOfImage(imageName:String)->String{
+        let index = imageName.count - 4
+        let substring = imageName.prefix(index)
+        return String(substring)
+    }
+    
+    //change the texture of the cell by changing the array
+    func changeTexture(_ texture: String?, _ index: Int?) {
+        print("texture changing in modelsetting")
+        modelColour[index!] = texture!
+        modelSpec[index!] = getNameOfImage(imageName: texture!)
+        self.optionTable.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.isMovingFromParentViewController {
+            print("we are coming back to view controller")
+            //pass data by delegate
+            delegate?.changeObjectColour(modelColour,modelName)
+            
         }
+        
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        delegate?.changeObjectColour(modelColour)
-    }
     
 
     
