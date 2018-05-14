@@ -61,7 +61,7 @@
                                 </constraints>
                                 <state key="normal" title="Button" image="photos.png"/>
                                 <connections>
-                                    <segue destination="bU9-7k-6o8" kind="show" id="FWh-iU-oLK"/>
+                                    <segue destination="bU9-7k-6o8" kind="show" identifier="ShowGallery" id="FWh-iU-oLK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggp-O3-De3">

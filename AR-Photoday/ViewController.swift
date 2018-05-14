@@ -184,6 +184,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 self.showToast("Cancelled adding")
                 return false
             }
+        case "ShowGallery", "ShowSettings":
+            return true
         default:
             print("Unrecognized segue identifier: \(identifier)")
             return false
