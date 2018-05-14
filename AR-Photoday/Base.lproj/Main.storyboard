@@ -50,7 +50,7 @@
                                 </constraints>
                                 <state key="normal" image="add.png"/>
                                 <connections>
-                                    <segue destination="tdV-3h-WQy" kind="show" id="Fgy-qr-ESB"/>
+                                    <segue destination="tdV-3h-WQy" kind="show" identifier="SelectModel" id="Fgy-qr-ESB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-hm-CcE">

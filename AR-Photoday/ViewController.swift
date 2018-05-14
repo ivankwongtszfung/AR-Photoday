@@ -172,6 +172,24 @@ class ViewController: UIViewController, ModelSettingDelegate {
         }
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch(identifier) {
+        case "SelectModel":
+            // If in normal mode: Go to choose model
+            if nodeToAdd == nil { return true }
+            else {
+                // If in add mode: return to cancel mode
+                clearNodeToAdd(in: sceneView)
+                print("Cancelled adding")
+                self.view.makeToast("Cancelled adding")
+                return false
+            }
+        default:
+            print("Unrecognized segue identifier: \(identifier)")
+            return false
+        }
+    }
+    
     // MARK: Unwind segue
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
         switch(segue.identifier) {
@@ -190,6 +208,9 @@ class ViewController: UIViewController, ModelSettingDelegate {
             // Ready to receive for tap action (see @singleTapHandler)
             let name = nodeToAdd?.name ?? ""
             self.view.makeToast("Tap on a plane/point to add model \(name)")
+            
+            // Change add button to cancel button
+            self.add.transform = self.add.transform.rotated(by: .pi/4)
             break
         default:
             break
@@ -481,6 +502,16 @@ class ViewController: UIViewController, ModelSettingDelegate {
         }
     }
     
+    // Return add mode to cancel mode
+    func clearNodeToAdd(in view: ARSCNView) {
+        // Hide planes, reset nodeToAdd and chosen model
+        toggleNodeVisibility(name: "plane", in: view, visibility: false)
+        nodeToAdd = nil
+        chosenModel = ""
+        // Change cancel button back to add button
+        self.add.transform = self.add.transform.rotated(by: .pi/4)
+    }
+    
     // MARK: - Gesture handlers
     @objc func singleTapHandler(_ recognizer: UIGestureRecognizer) {
         // Case: Adding a model node to scene
@@ -514,15 +545,13 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 // Add object to the plane
                 objNode.position = SCNVector3(translation.x, translation.y, translation.z)
                 sceneView.scene.rootNode.addChildNode(objNode)
+                
+                // Return add mode to normal mode
+                clearNodeToAdd(in: sceneView)
             } else {
                 // Display fail message
                 self.view.makeToast("Try to place the model again")
             }
-            
-            // 4. Hide planes, reset nodeToAdd and chosen model
-            toggleNodeVisibility(name: "plane", in: sceneView, visibility: false)
-            nodeToAdd = nil
-            chosenModel = ""
         }
     }
     
