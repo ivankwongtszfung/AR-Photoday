@@ -329,16 +329,19 @@ class ViewController: UIViewController, ModelSettingDelegate {
             let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!
             print(model)
             if(model == "Texture"){
-                print(firstColor.childNodes.count)
-                print(secondColor.childNodes.count)
-                firstColor.enumerateChildNodes { node, _ in
-                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
-                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
+                for index in 1...22 {
+                    print("ivankwongtszf")
+                    firstColor.childNodes[index-1].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
+                    secondColor.childNodes[index-1].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
                 }
-                secondColor.enumerateChildNodes { node, _ in
-                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
-                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
-                }
+//                firstColor.enumerateChildNodes { node, _ in
+//                    node
+//                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
+//                }
+//                secondColor.enumerateChildNodes { node, _ in
+//                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
+//                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
+//                }
             }
             else if(model == "Colour"){
                 firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
