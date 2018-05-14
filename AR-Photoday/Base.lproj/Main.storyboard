@@ -84,7 +84,7 @@
                                 <state key="normal" title="Button" image="setting.png"/>
                                 <connections>
                                     <action selector="openSettings:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Qqu-KU-Isd"/>
-                                    <segue destination="X3x-7F-cfl" kind="show" id="kjj-D9-gql"/>
+                                    <segue destination="Zhs-sc-xhi" kind="show" identifier="ShowSettings" id="R3U-zL-9zj"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -116,11 +116,27 @@
                         <outlet property="sceneView" destination="HSG-PW-wgc" id="TZu-iY-gvJ"/>
                         <outlet property="setting" destination="nF1-DM-2pN" id="pcD-hB-wqe"/>
                         <outlet property="snap" destination="dBJ-Qv-iRX" id="3Ux-YM-OTj"/>
+                        <segue destination="X3x-7F-cfl" kind="show" identifier="ShowOption" id="5ER-0w-H16"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="133.5832083958021"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="47j-ok-kII">
+            <objects>
+                <viewController title="Settings" id="Zhs-sc-xhi" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YS3-z4-r37">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="n8C-CI-0Ob"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XRo-Sm-Tux" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="920"/>
         </scene>
         <!--Add Model-->
         <scene sceneID="7Zw-QM-d87">
@@ -408,10 +424,10 @@
             </objects>
             <point key="canvasLocation" x="5348" y="133.5832083958021"/>
         </scene>
-        <!--Colour Texture-->
+        <!--Model Option-->
         <scene sceneID="gYV-up-FQt">
             <objects>
-                <viewController storyboardIdentifier="OptionPage" id="X3x-7F-cfl" customClass="ColourTexture" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OptionPage" title="Model Option" id="X3x-7F-cfl" customClass="ColourTexture" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3I1-8F-gmx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
