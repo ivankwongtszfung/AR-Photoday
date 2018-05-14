@@ -11,6 +11,8 @@ import SceneKit
 import ARKit
 import ReplayKit
 import Toast_Swift
+import Photos
+import AVFoundation
 
 class ViewController: UIViewController, ModelSettingDelegate {
 
@@ -35,7 +37,9 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     let recorder = RPScreenRecorder.shared()
     
-    var toastStyle: ToastStyle = ToastStyle()
+    var toastStyle = ToastStyle(), toastImportantStyle = ToastStyle()
+    
+    enum permission { case camera, album }
 
     // MARK: - ViewController
     override func viewDidLoad() {
@@ -81,12 +85,29 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
         // Set up Toast settings
         toastStyle.maxWidthPercentage = 0.9
+        toastStyle.messageAlignment = .center
+        toastImportantStyle = toastStyle
+        toastImportantStyle.backgroundColor = .red
         ToastManager.shared.style = toastStyle
         ToastManager.shared.position = .top
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Ensure camera permission is granted
+        let permission = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        switch(permission) {
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: AVMediaType.video) { (granted) in
+                if !granted { self.requestPermission(permission: ViewController.permission.camera) }
+            }
+            break
+        case .authorized:
+            break
+        default:
+            requestPermission(permission: ViewController.permission.camera)
+        }
         
         // Hide the Nav Bar
         self.navigationController?.isNavigationBarHidden = true
@@ -232,7 +253,19 @@ class ViewController: UIViewController, ModelSettingDelegate {
             shutterView.removeFromSuperview()
         })
 
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        let permission = PHPhotoLibrary.authorizationStatus()
+        switch(permission) {
+        case .authorized:
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            break
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { (status) in
+                if status == PHAuthorizationStatus.authorized { UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) }
+            }
+            break
+        default:
+            requestPermission(permission: ViewController.permission.album)
+        }
         dismiss(animated: true, completion: nil)
     }
     
@@ -396,6 +429,31 @@ class ViewController: UIViewController, ModelSettingDelegate {
             print("storyboard dont contain OptionPage identifier")
         }
         return
+    }
+    
+    // Request permission from user (if not permitted)
+    func requestPermission(permission: permission) {
+        self.view.makeToast("Permission needed. \nClick for information", duration: 5, style: toastImportantStyle) { (didTap) in
+            if didTap {
+                var requestText: String
+                switch(permission) {
+                case .album:
+                    requestText = "Album permission is used for adding and accessing photos.\nClick \"Photos\" then click \"Read and Write\" access."
+                case .camera:
+                    requestText = "Camera permission is required in this app.\nClick the switch button on the \"Camera\" row."
+                }
+                let dialog = UIAlertController(title: "Permission Request", message: requestText, preferredStyle: .alert)
+                let goAction = UIAlertAction(title: "Go to Settings", style: .default) { (_) in
+                    if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                        UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+                    }
+                }
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                dialog.addAction(goAction)
+                dialog.addAction(cancelAction)
+                self.present(dialog, animated: true, completion: nil)
+            }
+        }
     }
     
     // MARK: - Gesture handlers
