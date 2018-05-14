@@ -382,16 +382,10 @@ class ViewController: UIViewController, ModelSettingDelegate {
             let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!
             print(model)
             if(model == "Texture"){
-                print(firstColor.childNodes.count)
-                print(secondColor.childNodes.count)
-                firstColor.enumerateChildNodes { node, _ in
-                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
-                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
-                }
-                secondColor.enumerateChildNodes { node, _ in
-                    node.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
-                    node.geometry!.firstMaterial!.lightingModel = .physicallyBased
-                }
+                firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
+                secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
             }
             else if(model == "Colour"){
                 firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
