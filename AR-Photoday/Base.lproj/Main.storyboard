@@ -297,7 +297,7 @@
                                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView hidden="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick.png" highlightedImage="tick.png" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Qv-Thq">
+                                        <imageView hidden="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Qv-Thq">
                                             <rect key="frame" x="90" y="0.0" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -411,6 +411,6 @@
         <image name="photos.png" width="418" height="418"/>
         <image name="refresh.png" width="128" height="128"/>
         <image name="setting.png" width="128" height="128"/>
-        <image name="tick.png" width="50" height="50"/>
+        <image name="tick" width="50" height="50"/>
     </resources>
 </document>
