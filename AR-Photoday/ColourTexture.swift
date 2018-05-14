@@ -8,21 +8,26 @@
 
 import UIKit
 
-class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,ModelSettingDelegate {
-    
-    enum IntParsingError: Error {
-        case overflow
-        case invalidInput(String)
-    }
-    
-    func changeObjectColour(_ colour: [String]!) {
-        ///implmenting modelsetting delegate
+class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,ModelSettingDelegate {    
+
+    func changeObjectColour(_ colour: [String]!,_ model: String) {
+        //set the colour array
+        print("changing objected begin:")
+        print(colour)
+        print(model)
+        colourArr=colour
+        modelOption=model
+        
+        print("changing objected end:")
+
+
     }
 
     var colourArr = ["ff0000","00ff00"]
+    var modelOption = String()
     var optionArr = ["Colour":["colour 1","colour 2"],"Texture":["texture 1","texture 2"]]
     var theColor = true
-    
+    weak var delegate: ModelSettingDelegate?
     
     @IBOutlet weak var table: UITableView!
     let arr = ["Colour","Texture"]
@@ -89,6 +94,16 @@ class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
 
-
+    
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParentViewController {
+            print("we are coming back to view controller")
+            //pass data by delegate
+            delegate?.changeObjectColour(colourArr, modelOption)
+            
+        }
+    }
 
 }

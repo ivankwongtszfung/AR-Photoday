@@ -257,16 +257,16 @@
             </objects>
             <point key="canvasLocation" x="2077.5999999999999" y="977.36131934032994"/>
         </scene>
-        <!--Ballon Arch-->
+        <!--Model Option-->
         <scene sceneID="bUX-FD-F2I">
             <objects>
-                <viewController storyboardIdentifier="ModelSetting" title="Ballon Arch" id="lBe-aW-ibT" customClass="ModelSetting" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ModelSetting" title="Model Option" id="lBe-aW-ibT" customClass="ModelSetting" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B0N-yF-Ioo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VAm-fs-WKX">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell" id="w6a-65-ZoM" customClass="CustomTableViewCell" customModule="AR_Photoday" customModuleProvider="target">
@@ -324,19 +324,79 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9L4-an-kC7"/>
                     </view>
+                    <navigationItem key="navigationItem" id="My1-5w-2yX"/>
                     <connections>
                         <outlet property="optionTable" destination="VAm-fs-WKX" id="a8z-jO-YRL"/>
                         <segue destination="yXa-hj-vj9" kind="show" identifier="showColour" id="Nmx-2S-9Vq"/>
+                        <segue destination="1Id-cA-GiP" kind="show" identifier="showTexture" id="NtK-t7-kQz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qnZ-jQ-pwV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3545" y="134"/>
+            <point key="canvasLocation" x="4484" y="133.5832083958021"/>
         </scene>
-        <!--Colour Picker-->
+        <!--Choose Texture-->
+        <scene sceneID="3Nr-Kt-uAY">
+            <objects>
+                <collectionViewController title="Choose Texture" id="1Id-cA-GiP" customClass="TexturePicker" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="aoC-o0-64q">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="T7k-JY-rRq">
+                            <size key="itemSize" width="120" height="120"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="reuseIdentifier" id="lf0-Ng-OY2" customClass="TextureCell" customModule="AR_Photoday" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" semanticContentAttribute="forceLeftToRight" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VbQ-n7-Gdl">
+                                            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL4-Za-oEi">
+                                            <rect key="frame" x="0.0" y="90" width="120" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView hidden="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="Mve-Qv-Thq">
+                                            <rect key="frame" x="90" y="0.0" width="30" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </imageView>
+                                    </subviews>
+                                </view>
+                                <connections>
+                                    <outlet property="TextureLabel" destination="eL4-Za-oEi" id="z0l-Pl-HKi"/>
+                                    <outlet property="TextureView" destination="VbQ-n7-Gdl" id="Ok9-Zc-GJd"/>
+                                    <outlet property="TickView" destination="Mve-Qv-Thq" id="vTD-JI-5G2"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="1Id-cA-GiP" id="F3x-Dj-iPK"/>
+                            <outlet property="delegate" destination="1Id-cA-GiP" id="53O-Ek-j8h"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xmc-cu-PXU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3544.8000000000002" y="853.22338830584715"/>
+        </scene>
+        <!--Choose Colour-->
         <scene sceneID="fDS-JK-DHQ">
             <objects>
-                <viewController id="yXa-hj-vj9" customClass="ColourPicker" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Choose Colour" id="yXa-hj-vj9" customClass="ColourPicker" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZnD-cD-xvB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -346,7 +406,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pG5-hW-9nb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4409" y="134"/>
+            <point key="canvasLocation" x="5348" y="133.5832083958021"/>
         </scene>
         <!--Colour Texture-->
         <scene sceneID="gYV-up-FQt">
@@ -397,7 +457,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QBz-o9-B9q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2592.8000000000002" y="133.5832083958021"/>
+            <point key="canvasLocation" x="2375" y="134"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hZY-zm-SjH">
@@ -417,11 +477,30 @@
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="vC1-s3-kGj">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="OSn-oa-aIw" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Ir0-Mj-epP">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="lBe-aW-ibT" kind="relationship" relationship="rootViewController" id="v1L-uq-JHn"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vdg-Za-pb5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3544.8000000000002" y="133.5832083958021"/>
+        </scene>
     </scenes>
     <resources>
         <image name="add.png" width="128" height="128"/>
         <image name="photos.png" width="418" height="418"/>
         <image name="refresh.png" width="128" height="128"/>
         <image name="setting.png" width="128" height="128"/>
+        <image name="tick" width="50" height="50"/>
     </resources>
 </document>

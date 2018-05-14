@@ -66,6 +66,8 @@ class ColourPicker: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.changeColour(colorCode, arrayIndex)
     }
+    
+    
 }
 
 
@@ -74,7 +76,6 @@ extension ColourPicker: ChromaColorPickerDelegate{
     func colorPickerDidChooseColor(_ colorPicker: ChromaColorPicker, color: UIColor) {
         //Set color for the display view
         colorCode = colorPicker.hexLabel.text
-        
         // Back to
         navigationController?.popViewController(animated: true)
     }
