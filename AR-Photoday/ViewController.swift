@@ -116,6 +116,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
         // Run the view's session
         setUpSceneView(for: sceneView)
+        configLighting(for: sceneView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -154,7 +155,6 @@ class ViewController: UIViewController, ModelSettingDelegate {
         view.session.run(configuration)
         
         view.delegate = self
-        view.showsStatistics = true // Show statistics such as fps and timing information
         view.debugOptions = []
     }
     
@@ -184,6 +184,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 self.showToast("Cancelled adding")
                 return false
             }
+        case "ShowOption", "ShowGallery", "ShowSettings":
+            return true
         default:
             print("Unrecognized segue identifier: \(identifier)")
             return false
