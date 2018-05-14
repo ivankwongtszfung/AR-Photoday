@@ -15,6 +15,8 @@
 		5E6BC31F20A0325900E80A51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC31E20A0325900E80A51 /* Assets.xcassets */; };
 		5E6BC32220A0325900E80A51 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC32020A0325900E80A51 /* LaunchScreen.storyboard */; };
 		5E6BC32A20A0349A00E80A51 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5E6BC32920A0349A00E80A51 /* .gitignore */; };
+		AB5DA70A20A97A4E007011BD /* Pods-AR-Photoday.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 052483BD7A106EAC51EF6585 /* Pods-AR-Photoday.debug.xcconfig */; };
+		AB5DA70B20A97A51007011BD /* Pods-AR-Photoday.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 08408CD115FEE58A487610C8 /* Pods-AR-Photoday.release.xcconfig */; };
 		ABEBB41E20A18B1D00FFDC69 /* ChromaShadeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41620A18B1D00FFDC69 /* ChromaShadeSlider.swift */; };
 		ABEBB41F20A18B1D00FFDC69 /* UIColor+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41720A18B1D00FFDC69 /* UIColor+Utilities.swift */; };
 		ABEBB42020A18B1D00FFDC69 /* ChromaColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41920A18B1D00FFDC69 /* ChromaColorPicker.swift */; };
@@ -229,11 +231,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB5DA70A20A97A4E007011BD /* Pods-AR-Photoday.debug.xcconfig in Resources */,
 				5E6BC32A20A0349A00E80A51 /* .gitignore in Resources */,
 				5E6BC31820A0325800E80A51 /* art.scnassets in Resources */,
 				ABEBB42220A18B1D00FFDC69 /* Info.plist in Resources */,
 				5E6BC32220A0325900E80A51 /* LaunchScreen.storyboard in Resources */,
 				5E6BC31F20A0325900E80A51 /* Assets.xcassets in Resources */,
+				AB5DA70B20A97A51007011BD /* Pods-AR-Photoday.release.xcconfig in Resources */,
 				5E6BC31D20A0325800E80A51 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
