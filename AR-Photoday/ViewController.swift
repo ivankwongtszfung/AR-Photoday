@@ -154,7 +154,6 @@ class ViewController: UIViewController, ModelSettingDelegate {
         view.session.run(configuration)
         
         view.delegate = self
-        view.showsStatistics = true // Show statistics such as fps and timing information
         view.debugOptions = []
     }
     
