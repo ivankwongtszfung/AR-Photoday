@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 import ReplayKit
-
+import Toast_Swift
 
 class ViewController: UIViewController, ModelSettingDelegate {
 
@@ -34,6 +34,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var selectedNode: SCNNode?
     
     let recorder = RPScreenRecorder.shared()
+    
+    var toastStyle: ToastStyle = ToastStyle()
 
     // MARK: - ViewController
     override func viewDidLoad() {
@@ -73,10 +75,14 @@ class ViewController: UIViewController, ModelSettingDelegate {
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panHandler(with:)))
         sceneView.addGestureRecognizer(panRecognizer)
         
+        // Long gesture recognizer (on snap button)
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(record(sender:)))
         snap.addGestureRecognizer(longGesture)
-        sceneView.addGestureRecognizer(tapGesture)
 
+        // Set up Toast settings
+        toastStyle.maxWidthPercentage = 0.9
+        ToastManager.shared.style = toastStyle
+        ToastManager.shared.position = .top
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,7 +167,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             
             // Ready to receive for tap action (see @singleTapHandler)
             let name = nodeToAdd?.name ?? ""
-            print("Status: Tap on a plane/point to add model \(name)")
+            self.view.makeToast("Tap on a plane/point to add model \(name)")
             break
         default:
             break
@@ -187,7 +193,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             }
             // Resume the session
             self.sceneView.session.run(configuration)
-            print("Status: All models removed")
+            self.view.makeToast("All models removed")
             return
         }
         let restartAction = UIAlertAction(title: "Restart the app", style: .destructive) { (_) in
@@ -197,7 +203,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             }
             // Start the session again
             self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-            print("Status: App restarted")
+            self.view.makeToast("App restarted")
             return
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
@@ -244,7 +250,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
                     self.present(previewVC,animated: true,completion: nil)
                 }
                 if let error = error {
-                    print("Status: Error when stopping recording")
+                    self.view.makeToast("Error when stopping recording")
                     print(error)
                 }
             }
@@ -257,7 +263,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             add.isHidden = true
             recorder.startRecording(){ (error) in
                 if let error = error {
-                    print("Status: Error when recording")
+                    self.view.makeToast("Error when recording")
                     print(error)
                 }
             }
@@ -404,14 +410,14 @@ class ViewController: UIViewController, ModelSettingDelegate {
             // 2. Find if a plane or a random point is selected
             var hitTestResult: ARHitTestResult?
             if hitTestResults.count > 0 {
-                print("Status: Model \(name) added on a plane")
+                self.view.makeToast("Model \(name) added on a plane")
                 // Location is on the plane
                 hitTestResult = hitTestResults.first
             } else {
                 // Try to find on feature points
                 let hitTestPoints = sceneView.hitTest(tapLocation, types: .featurePoint)
                 if hitTestPoints.count > 0 {
-                    print("Status: Model \(name) added on a point")
+                    self.view.makeToast("Model \(name) added on a point")
                     // Location is a random point
                     hitTestResult = hitTestPoints.first
                 }
@@ -427,7 +433,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 sceneView.scene.rootNode.addChildNode(objNode)
             } else {
                 // Display fail message
-                print("Status: Try to place the model again")
+                self.view.makeToast("Try to place the model again")
             }
             
             // 4. Hide planes, reset nodeToAdd and chosen model
@@ -446,7 +452,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
         let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
             node.removeFromParentNode()
-            print("Status: Model \(name) deleted")
+            self.view.makeToast("Model \(name) deleted")
         }
         let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

@@ -8,5 +8,6 @@ target 'AR-Photoday' do
   use_frameworks!
 
   # Pods for AR-Photoday
+  pod 'Toast-Swift', '~> 3.0.1'
 
 end
