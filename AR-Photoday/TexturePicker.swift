@@ -21,7 +21,7 @@ class TexturePicker: UICollectionViewController {
     
     let store = ["add.png","angry.png","love.png","tick.png","redball.jpg","texture.png"]
     var arrayIndex: Int!
-    var textureCode: String!
+    var textureCode: String = ""
     weak var delegate: TexturePickerDelegate?
     
     override func viewDidLoad() {

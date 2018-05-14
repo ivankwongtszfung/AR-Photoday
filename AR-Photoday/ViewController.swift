@@ -29,7 +29,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     var nameArr = ["Colour 1","Colour 2"]
     var theColor = true
     
-    let ELIGIBLE_OBJ = ["Sphere","bridge"]
+    let ELIGIBLE_OBJ = ["Sphere","bridge","Cube","Text"]
     var ELIGIBLE_MODEL = ["bubbleArch"]
 
     var chosenModel: String = ""
@@ -420,17 +420,9 @@ class ViewController: UIViewController, ModelSettingDelegate {
         if recursively {
             // Loop all hit test result before it gives up
             for hitTestResult in hitTestResults {
-                var node = hitTestResult.node
-                // Perform a DFS search of nodes, until it searches the SCNView's root node
-                while (node != view.scene?.rootNode) {
-    //                if let name = node.name { print("Searching node: " + name) }
-                    if strMatchArray(array: ELIGIBLE_MODEL, node: node) {
-    //                    if let name = node.name { print("Selecting node: " + name) }
-                        return node
-                    } else {
-                        // Search its parent node
-                        node = node.parent!
-                    }
+                let node = hitTestResult.node
+                if let modelNode = findModelNode(node: node, view: sceneView) {
+                    return modelNode
                 }
             }
 //            print("No node found")
@@ -444,8 +436,24 @@ class ViewController: UIViewController, ModelSettingDelegate {
         }
     }
     
+    // Find parent node matching model name
+    func findModelNode(node: SCNNode, view: SCNView) -> SCNNode? {
+        // Perform a DFS search of nodes, until it searches the SCNView's root node
+        var currentNode = node
+        while (currentNode != view.scene?.rootNode) {
+//            if let name = currentNode.name { print("Searching node: " + name) }
+            if strMatchArray(array: ELIGIBLE_MODEL, node: currentNode) {
+//                if let name = currentNode.name { print("Selecting node: " + name) }
+                return currentNode
+            } else {
+                // Search its parent node
+                currentNode = currentNode.parent!
+            }
+        }
+        return nil
+    }
+    
     func strMatchArray(array: Array<String>,node: SCNNode)->Bool{
-        
         guard let string = node.name else{
             return false
         }
@@ -581,10 +589,17 @@ class ViewController: UIViewController, ModelSettingDelegate {
             node.removeFromParentNode()
             self.showToast("Model \(name) deleted")
         }
+        let deleteWholeAction = UIAlertAction(title: "Delete Whole Model", style: .destructive) { (_) in
+            let modelNode = self.findModelNode(node: node, view: self.sceneView)
+            let name = modelNode?.name
+            modelNode?.removeFromParentNode()
+            self.showToast("Model \(name ?? "is") deleted")
+        }
         let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        dialog.addAction(deleteAction)
         dialog.addAction(optionAction)
+        dialog.addAction(deleteAction)
+        dialog.addAction(deleteWholeAction)
         dialog.addAction(cancelAction)
         self.present(dialog, animated: true, completion: nil)
     }
