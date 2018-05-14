@@ -391,16 +391,16 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
                 firstColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
                 secondColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
-                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
-                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .physicallyBased
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .physicallyBased
             }
             else if(model == "Colour"){
                 firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
                 secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[1])
                 firstColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
                 secondColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
-                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
-                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .physicallyBased
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .physicallyBased
             }
             return
         }
