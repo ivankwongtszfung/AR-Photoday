@@ -378,6 +378,10 @@ class ViewController: UIViewController, ModelSettingDelegate {
         print("changing object Color")
         colourArr=colour
         print(model)
+        let estimate = sceneView.session.currentFrame?.lightEstimate
+        if(!(estimate != nil)){
+            return
+        }
         if sceneView.scene.rootNode.childNode(withName: "bridge", recursively: true) != nil{
             let firstColor = sceneView.scene.rootNode.childNode(withName: "first_Arc", recursively: true)!
             let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!
@@ -385,14 +389,18 @@ class ViewController: UIViewController, ModelSettingDelegate {
             if(model == "Texture"){
                 firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
                 secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
-                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
-                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
+                firstColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
+                secondColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
             }
             else if(model == "Colour"){
                 firstColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
                 secondColor.childNodes[0].geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[1])
-                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
-                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .phong
+                firstColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
+                secondColor.childNodes[0].geometry!.firstMaterial!.ambient.intensity = (estimate?.ambientIntensity)!
+                firstColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
+                secondColor.childNodes[0].geometry!.firstMaterial!.lightingModel = .constant
             }
             return
         }
