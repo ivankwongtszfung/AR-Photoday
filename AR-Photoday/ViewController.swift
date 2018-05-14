@@ -116,6 +116,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
         // Run the view's session
         setUpSceneView(for: sceneView)
+        configLighting(for: sceneView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
