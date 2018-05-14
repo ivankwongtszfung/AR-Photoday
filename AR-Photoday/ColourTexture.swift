@@ -23,7 +23,7 @@ class ColourTexture: UIViewController,UITableViewDelegate,UITableViewDataSource,
 
     }
 
-    var colourArr = ["ff0000","00ff00"]
+    var colourArr = ["7f7f7f","7f7f7f"]
     var modelOption = String()
     var optionArr = ["Colour":["colour 1","colour 2"],"Texture":["texture 1","texture 2"]]
     var theColor = true
