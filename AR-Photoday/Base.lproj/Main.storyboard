@@ -50,7 +50,7 @@
                                 </constraints>
                                 <state key="normal" image="add.png"/>
                                 <connections>
-                                    <action selector="addModel:" destination="BV1-FR-VrT" eventType="touchUpInside" id="9Cp-Wd-AyA"/>
+                                    <segue destination="tdV-3h-WQy" kind="show" id="Fgy-qr-ESB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-hm-CcE">
@@ -84,7 +84,7 @@
                                 <state key="normal" title="Button" image="setting.png"/>
                                 <connections>
                                     <action selector="openSettings:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Qqu-KU-Isd"/>
-                                    <segue destination="X3x-7F-cfl" kind="show" identifier="OptionPage" id="kjj-D9-gql"/>
+                                    <segue destination="X3x-7F-cfl" kind="show" id="kjj-D9-gql"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -110,12 +110,83 @@
                     </view>
                     <navigationItem key="navigationItem" id="pbb-VM-gmT"/>
                     <connections>
+                        <outlet property="add" destination="fct-uc-Edg" id="soG-vy-mag"/>
+                        <outlet property="gallery" destination="Ecc-hm-CcE" id="xgV-6C-dd9"/>
+                        <outlet property="refresh" destination="ggp-O3-De3" id="lQ1-MK-iCg"/>
                         <outlet property="sceneView" destination="HSG-PW-wgc" id="TZu-iY-gvJ"/>
+                        <outlet property="setting" destination="nF1-DM-2pN" id="pcD-hB-wqe"/>
+                        <outlet property="snap" destination="dBJ-Qv-iRX" id="3Ux-YM-OTj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="133.5832083958021"/>
+        </scene>
+        <!--Add Model-->
+        <scene sceneID="7Zw-QM-d87">
+            <objects>
+                <viewController title="Add Model" id="tdV-3h-WQy" customClass="ModelsViewController" customModule="AR_Photoday" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RzJ-6e-2k1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4rS-oR-i2x">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="esh-5a-rxJ">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="5qw-s6-OOQ" customClass="ModelCollectionViewCell" customModule="AR_Photoday" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Usj-Wk-jnF">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="Usj-Wk-jnF" secondAttribute="bottom" id="8Ad-yc-w2w"/>
+                                            <constraint firstItem="Usj-Wk-jnF" firstAttribute="top" secondItem="5qw-s6-OOQ" secondAttribute="top" id="C41-QE-4WT"/>
+                                            <constraint firstItem="Usj-Wk-jnF" firstAttribute="top" secondItem="5qw-s6-OOQ" secondAttribute="top" id="IgW-3Q-7Bp"/>
+                                            <constraint firstItem="Usj-Wk-jnF" firstAttribute="leading" secondItem="5qw-s6-OOQ" secondAttribute="leading" id="Iwf-Z0-jYP"/>
+                                            <constraint firstAttribute="trailing" secondItem="Usj-Wk-jnF" secondAttribute="trailing" id="Ncu-gJ-j9n"/>
+                                            <constraint firstAttribute="bottom" secondItem="Usj-Wk-jnF" secondAttribute="bottom" id="SRB-ED-m6X"/>
+                                            <constraint firstItem="Usj-Wk-jnF" firstAttribute="leading" secondItem="5qw-s6-OOQ" secondAttribute="leading" id="WaH-Rg-ADi"/>
+                                            <constraint firstAttribute="trailing" secondItem="Usj-Wk-jnF" secondAttribute="trailing" id="Yzt-wb-NRi"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="Usj-Wk-jnF" id="cKC-eG-OC5"/>
+                                            <segue destination="wMH-zb-Jwm" kind="unwind" identifier="AddModel" unwindAction="unwind:" id="8gU-zg-hbK"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="xkF-m2-Y2R" firstAttribute="bottom" secondItem="4rS-oR-i2x" secondAttribute="bottom" id="GVN-Zk-pcd"/>
+                            <constraint firstItem="xkF-m2-Y2R" firstAttribute="trailing" secondItem="4rS-oR-i2x" secondAttribute="trailing" id="ZPf-my-kez"/>
+                            <constraint firstItem="4rS-oR-i2x" firstAttribute="top" secondItem="xkF-m2-Y2R" secondAttribute="top" id="ec6-LV-2OW"/>
+                            <constraint firstItem="4rS-oR-i2x" firstAttribute="leading" secondItem="xkF-m2-Y2R" secondAttribute="leading" id="fYk-QU-Kzg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="xkF-m2-Y2R"/>
+                    </view>
+                    <connections>
+                        <outlet property="modelCollectionView" destination="4rS-oR-i2x" id="gfI-0h-YEa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zxG-bj-JJD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="wMH-zb-Jwm" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1076" y="920"/>
         </scene>
         <!--Photo Gallery-->
         <scene sceneID="AWg-S8-WG6">

@@ -83,8 +83,10 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     
     // Change the colour of the cell by changing the array
     func changeColour(_ colour: String?, _ index: Int?){
-        modelColour[index!] = colour!
-        self.optionTable.reloadData()
+        if(!colour.isEmpty){
+            modelColour[index!] = colour!
+            self.optionTable.reloadData()
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -143,10 +143,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? ModelSetting {
+        if let destination = segue.destination as? ColourTexture {
             destination.delegate = self
-            destination.modelColour=colourArr
-            destination.modelSpec=nameArr
         }
     }
     
@@ -320,13 +318,20 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     func changeObjectColour(_ colour: [String]!) {
         //case balloon arch
-        print("changing objet Color")
+        print("changing object Color")
         colourArr=colour
-        let bridge = sceneView.scene.rootNode.childNode(withName: "bridge", recursively: false)!
+        let bridge = sceneView.scene.rootNode.childNode(withName: "bridge", recursively: true)!
         let firstColor = sceneView.scene.rootNode.childNode(withName: "first_Arc", recursively: true)!.childNodes[0]
         let secondColor = sceneView.scene.rootNode.childNode(withName: "second_Arc", recursively: true)!.childNodes[0]
-        firstColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[0])
-        secondColor.geometry!.firstMaterial!.emission.contents = hexStringToUIColor(hex: colour[1])
+        //        firstColor.geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[0])
+        //        secondColor.geometry!.firstMaterial!.diffuse.contents = hexStringToUIColor(hex: colour[1])
+        firstColor.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[0])
+        secondColor.geometry!.firstMaterial!.diffuse.contents = UIImage(named: colour[1])
+        firstColor.geometry!.firstMaterial!.lightingModel = .physicallyBased
+        secondColor.geometry!.firstMaterial!.lightingModel = .physicallyBased
+        
+        
+        //UIImage(named: “earth.jpg”)
     }
     
     // Find the selected node recursively by performing hit test
@@ -512,6 +517,44 @@ class ViewController: UIViewController, ModelSettingDelegate {
         default:
             break
         }
+    }
+    
+    
+    func openModelSettingController(input :UIAlertAction) ->Void {
+        if(colourArr.isEmpty || nameArr.isEmpty)
+        {
+            print("color array and name array should not be empty.")
+            return
+        }
+        
+        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "ModelSetting") as? ModelSetting {
+            destination.delegate = self
+            destination.modelColour=colourArr
+            destination.modelSpec=nameArr
+            self.navigationController?.pushViewController(destination, animated: true)
+        }
+        else{
+            print("storyboard dont contain modelsetting  identifier")
+        }
+        return
+        
+    }
+    
+    func openColourTextureController(input :UIAlertAction) ->Void
+    {
+        performSegue(withIdentifier: "OptionPage", sender: self)
+        return
+    }
+    
+    func openOptionPage(input:UIAlertAction)->Void{
+        if let destination = self.storyboard?.instantiateViewController(withIdentifier: "OptionPage") as? ColourTexture {
+            destination.delegate = self
+            self.navigationController?.pushViewController(destination, animated: true)
+        }
+        else{
+            print("storyboard dont contain OptionPage identifier")
+        }
+        return
     }
     
     @objc func panHandler(with recognizer: UIPanGestureRecognizer) {
