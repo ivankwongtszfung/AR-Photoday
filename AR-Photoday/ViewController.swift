@@ -35,7 +35,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
     
     let recorder = RPScreenRecorder.shared()
 
-    
+    // MARK: - ViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,8 +79,6 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -105,6 +103,18 @@ class ViewController: UIViewController, ModelSettingDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
+        } else {
+            return .all
+        }
     }
     
     // MARK: - Scene view settings
@@ -146,8 +156,12 @@ class ViewController: UIViewController, ModelSettingDelegate {
             newNode.geometry = scene.rootNode.geometry?.copy() as? SCNGeometry
             nodeToAdd = newNode
             
-            // Show available planes, ready to receive for tap action (see @singleTapHandler)
+            // Show available planes
             toggleNodeVisibility(name: "plane", in: sceneView, visibility: true)
+            
+            // Ready to receive for tap action (see @singleTapHandler)
+            let name = nodeToAdd?.name ?? ""
+            print("Status: Tap on a plane/point to add model \(name)")
             break
         default:
             break
@@ -173,7 +187,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
             }
             // Resume the session
             self.sceneView.session.run(configuration)
-            print("Status: All models deleted")
+            print("Status: All models removed")
             return
         }
         let restartAction = UIAlertAction(title: "Restart the app", style: .destructive) { (_) in
@@ -214,6 +228,40 @@ class ViewController: UIViewController, ModelSettingDelegate {
 
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         dismiss(animated: true, completion: nil)
+    }
+    
+    // Video recording
+    @objc func record(sender : UIGestureRecognizer){
+        if sender.state == .ended {
+            snap.isHidden = false
+            setting.isHidden = false
+            refresh.isHidden = false
+            gallery.isHidden = false
+            add.isHidden = false
+            recorder.stopRecording(){ (previewVC, error) in
+                if let previewVC = previewVC{
+                    previewVC.previewControllerDelegate = self
+                    self.present(previewVC,animated: true,completion: nil)
+                }
+                if let error = error {
+                    print("Status: Error when stopping recording")
+                    print(error)
+                }
+            }
+        }
+        else if sender.state == .began {
+            snap.isHidden = true
+            setting.isHidden = true
+            refresh.isHidden = true
+            gallery.isHidden = true
+            add.isHidden = true
+            recorder.startRecording(){ (error) in
+                if let error = error {
+                    print("Status: Error when recording")
+                    print(error)
+                }
+            }
+        }
     }
 
     // MARK: - ARSessionObserver
@@ -263,7 +311,6 @@ class ViewController: UIViewController, ModelSettingDelegate {
             alpha: CGFloat(1.0)
         )
     }
-    
     
     func changeObjectColour(_ colour: [String]!) {
         //case balloon arch
@@ -345,22 +392,11 @@ class ViewController: UIViewController, ModelSettingDelegate {
         return
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
-    }
-    
     // MARK: - Gesture handlers
     @objc func singleTapHandler(_ recognizer: UIGestureRecognizer) {
         // Case: Adding a model node to scene
         if let objNode = nodeToAdd {
+            let name = objNode.name ?? ""
             // 1. Retrieve hit test plane results
             let tapLocation = recognizer.location(in: sceneView)
             let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
@@ -368,14 +404,14 @@ class ViewController: UIViewController, ModelSettingDelegate {
             // 2. Find if a plane or a random point is selected
             var hitTestResult: ARHitTestResult?
             if hitTestResults.count > 0 {
-                print("Adding on a plane")
+                print("Status: Model \(name) added on a plane")
                 // Location is on the plane
                 hitTestResult = hitTestResults.first
             } else {
                 // Try to find on feature points
                 let hitTestPoints = sceneView.hitTest(tapLocation, types: .featurePoint)
                 if hitTestPoints.count > 0 {
-                    print("Adding on a feature point")
+                    print("Status: Model \(name) added on a point")
                     // Location is a random point
                     hitTestResult = hitTestPoints.first
                 }
@@ -391,7 +427,7 @@ class ViewController: UIViewController, ModelSettingDelegate {
                 sceneView.scene.rootNode.addChildNode(objNode)
             } else {
                 // Display fail message
-                print("No point is selected!")
+                print("Status: Try to place the model again")
             }
             
             // 4. Hide planes, reset nodeToAdd and chosen model
@@ -409,8 +445,8 @@ class ViewController: UIViewController, ModelSettingDelegate {
         // Show action sheet
         let dialog = UIAlertController(title: name, message: nil, preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (_) in
-            print("Deleting node "+name)
             node.removeFromParentNode()
+            print("Status: Model \(name) deleted")
         }
         let optionAction = UIAlertAction(title: "Options", style: .default, handler: openOptionPage)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -555,41 +591,9 @@ extension ViewController: ARSCNViewDelegate {
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
     }
-    
-    @objc func record(sender : UIGestureRecognizer){
-        if sender.state == .ended {
-            snap.isHidden = false
-            setting.isHidden = false
-            refresh.isHidden = false
-            gallery.isHidden = false
-            add.isHidden = false
-            recorder.stopRecording(){ (previewVC, error) in
-                if let previewVC = previewVC{
-                    previewVC.previewControllerDelegate = self
-                    self.present(previewVC,animated: true,completion: nil)
-                }
-                
-                if let error = error{
-                    print("error")
-                }
-            }
-        }
-        else if sender.state == .began {
-            snap.isHidden = true
-            setting.isHidden = true
-            refresh.isHidden = true
-            gallery.isHidden = true
-            add.isHidden = true
-            recorder.startRecording(){ (error) in
-                if let error = error {
-                    print("error occur")
-                }
-            }
-        }
-    }
-
 }
 
+// MARK: - RPPreviewViewControllerDelegate
 extension ViewController: RPPreviewViewControllerDelegate{
     func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
         dismiss(animated: true, completion: nil)
