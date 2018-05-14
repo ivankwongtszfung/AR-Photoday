@@ -22,6 +22,7 @@
 		ABEBB42220A18B1D00FFDC69 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABEBB41B20A18B1D00FFDC69 /* Info.plist */; };
 		ABEBB42320A18B1D00FFDC69 /* ChromaHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41C20A18B1D00FFDC69 /* ChromaHandle.swift */; };
 		ABEBB42420A18B1D00FFDC69 /* ChromaAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEBB41D20A18B1D00FFDC69 /* ChromaAddButton.swift */; };
+		CF0976D293F206C2E52A0673 /* Pods_AR_Photoday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B23CB8BE64563105648EB6 /* Pods_AR_Photoday.framework */; };
 		F31F6C0A20A43AC30089BB05 /* PhotoGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31F6C0920A43AC30089BB05 /* PhotoGallery.swift */; };
 		F325749F20A03C8500371039 /* SnapButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F325749E20A03C8500371039 /* SnapButton.swift */; };
 		F3978E0E20A4820300FDEEA3 /* ChooseCTTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3978E0D20A4820300FDEEA3 /* ChooseCTTableViewCell.swift */; };
@@ -33,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		052483BD7A106EAC51EF6585 /* Pods-AR-Photoday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AR-Photoday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AR-Photoday/Pods-AR-Photoday.debug.xcconfig"; sourceTree = "<group>"; };
+		08408CD115FEE58A487610C8 /* Pods-AR-Photoday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AR-Photoday.release.xcconfig"; path = "Pods/Target Support Files/Pods-AR-Photoday/Pods-AR-Photoday.release.xcconfig"; sourceTree = "<group>"; };
 		5E1B269120A49C2B007A5EA6 /* ModelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewController.swift; sourceTree = "<group>"; };
 		5E6BC31220A0325800E80A51 /* AR-Photoday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR-Photoday.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E6BC31520A0325800E80A51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +54,7 @@
 		ABEBB41B20A18B1D00FFDC69 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABEBB41C20A18B1D00FFDC69 /* ChromaHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaHandle.swift; sourceTree = "<group>"; };
 		ABEBB41D20A18B1D00FFDC69 /* ChromaAddButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaAddButton.swift; sourceTree = "<group>"; };
+		C1B23CB8BE64563105648EB6 /* Pods_AR_Photoday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AR_Photoday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F31F6C0920A43AC30089BB05 /* PhotoGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoGallery.swift; sourceTree = "<group>"; };
 		F325749E20A03C8500371039 /* SnapButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapButton.swift; sourceTree = "<group>"; };
 		F3978E0D20A4820300FDEEA3 /* ChooseCTTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCTTableViewCell.swift; sourceTree = "<group>"; };
@@ -66,12 +70,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF0976D293F206C2E52A0673 /* Pods_AR_Photoday.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22DC86E66237D2498D26C69D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1B23CB8BE64563105648EB6 /* Pods_AR_Photoday.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5E6BC30920A0325800E80A51 = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +92,8 @@
 				5E6BC31420A0325800E80A51 /* AR-Photoday */,
 				5E6BC31320A0325800E80A51 /* Products */,
 				F3A2327720A438CB00F6A937 /* Recovered References */,
+				C6EF2F80A044BD506B49AD51 /* Pods */,
+				22DC86E66237D2498D26C69D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -127,6 +142,15 @@
 			path = ChromaColorPicker;
 			sourceTree = "<group>";
 		};
+		C6EF2F80A044BD506B49AD51 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				052483BD7A106EAC51EF6585 /* Pods-AR-Photoday.debug.xcconfig */,
+				08408CD115FEE58A487610C8 /* Pods-AR-Photoday.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		F3A2327720A438CB00F6A937 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +175,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E6BC32620A0325900E80A51 /* Build configuration list for PBXNativeTarget "AR-Photoday" */;
 			buildPhases = (
+				46CC73E40F797EA483E6F384 /* [CP] Check Pods Manifest.lock */,
 				5E6BC30E20A0325800E80A51 /* Sources */,
 				5E6BC30F20A0325800E80A51 /* Frameworks */,
 				5E6BC31020A0325800E80A51 /* Resources */,
@@ -213,6 +238,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		46CC73E40F797EA483E6F384 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AR-Photoday-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E6BC30E20A0325800E80A51 /* Sources */ = {
@@ -377,6 +423,7 @@
 		};
 		5E6BC32720A0325900E80A51 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 052483BD7A106EAC51EF6585 /* Pods-AR-Photoday.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -399,6 +446,7 @@
 		};
 		5E6BC32820A0325900E80A51 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08408CD115FEE58A487610C8 /* Pods-AR-Photoday.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
