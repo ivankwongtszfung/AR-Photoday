@@ -19,7 +19,7 @@ class TexturePicker: UICollectionViewController {
     
     //this is a hardcode array of the UIImage
     
-    let store = ["add.png","angry.png","love.png","tick.png","redball.jpg","texture.png"]
+    let store = ["add","angry","love","tick","redball","texture","wave","check","stripe","glass"]
     var arrayIndex: Int!
     var textureCode: String = ""
     weak var delegate: TexturePickerDelegate?
@@ -99,7 +99,7 @@ class TexturePicker: UICollectionViewController {
     func configureCell(cell: TextureCell,forItemAtIndexPath: IndexPath){
         cell.backgroundColor = UIColor.lightGray
         cell.TextureView.image = UIImage.init(named: store[forItemAtIndexPath.row])
-        cell.TextureLabel.text = getNameOfImage(num: forItemAtIndexPath.row)
+        cell.TextureLabel.text = store[forItemAtIndexPath.row]
         print(cell.debugDescription)
     }
 

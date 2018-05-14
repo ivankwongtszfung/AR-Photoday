@@ -128,7 +128,7 @@ class ModelSetting: UIViewController,UITableViewDelegate,UITableViewDataSource,C
     func changeTexture(_ texture: String?, _ index: Int?) {
         print("texture changing in modelsetting")
         modelColour[index!] = texture!
-        modelSpec[index!] = getNameOfImage(imageName: texture!)
+        modelSpec[index!] = texture!
         self.optionTable.reloadData()
     }
     
