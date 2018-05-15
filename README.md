@@ -65,10 +65,13 @@ Texture pictures are retrieved from [**Apple sample project**](https://developer
 
 ## Authors
 This project is developed by four year-4 CUHK BSc(Computer Science) undergraduates, who are members of Group 7 in 2017/18 CSCI4140:
-- Lung Cho Kit: @jokerlck / cklung5
-- Ivan Kwong: @ivankwongtszfung
-- Ronald Chan: @cch0074
-- Vincent Au: @vincentau / @auwingchun623
+
+Author | GitHub Profiles
+------ | ----------------
+Lung Cho Kit | [**jokerlck**](https://github.com/jokerlck) / cklung5
+Ivan Kwong | [**ivankwongtszfung**](https://github.com/ivankwongtszfung)
+Ronald Chan | [**cch0074**](https://github.com/cch0074)
+Vincent Au | [**vincentau**](https://github.com/vincentau) / [**auwingchun623**](https://github.com/auwingchun623)
 
 ## License
 This project is licensed under the MIT License - see the [**LICENSE**](/LICENSE) file for details
