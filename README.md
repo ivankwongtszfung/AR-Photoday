@@ -68,7 +68,7 @@ This project is developed by four year-4 CUHK BSc(Computer Science) undergraduat
 
 Author | GitHub Profiles
 ------ | ----------------
-Lung Cho Kit | [**kitlung**](https://github.com/jokerlck) / cklung5
+Lung Cho Kit | [**kitlung**](https://github.com/kitlung) / cklung5
 Ivan Kwong | [**ivankwongtszfung**](https://github.com/ivankwongtszfung)
 Ronald Chan | [**cch0074**](https://github.com/cch0074)
 Vincent Au | [**vincentau**](https://github.com/vincentau) / [**auwingchun623**](https://github.com/auwingchun623)
